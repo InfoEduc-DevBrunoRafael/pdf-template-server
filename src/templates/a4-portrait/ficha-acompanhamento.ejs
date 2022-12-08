@@ -10,29 +10,35 @@
 
 <body>
     <div id="container">
-        <h2 class="text-center">FICHA DE ACOMPANHAMENTO</h2>
+        <%- include("../reusable/header-escola.ejs") %>
+        
         <div style="line-height: 1.6;">
             <div class="multicolumn inline">
                 <b>Instituição de Ensino:</b>
                 <div class="text-line"><%= acompanhamento.nome_escola %></div>
-                <b>Ano Letivo:</b>
-                <div style="max-width: 70px;" class="text-line"><%= acompanhamento.ano_letivo %></div>
             </div>
             <div class="multicolumn inline">
                 <b>Prof (a):</b>
                 <div class="text-line"><%= acompanhamento.professor %></div>
-                <b>Período Letivo:</b>
-                <div style="max-width: 70px;" class="text-line"><%= acompanhamento.periodo_letivo %></div>
+                
             </div>
             <div class="multicolumn inline">
                 <b>Aluno(a):</b>
                 <div class="text-line"><%= acompanhamento.nome_aluno %></div>
+            </div>
+            <div class="multicolumn inline">
                 <b>Turma:</b>
                 <div style="max-width: 120px;" class="text-line"><%= acompanhamento.turma %></div>
                 <b>Turno:</b>
                 <div style="max-width: 120px;" class="text-line"><%= acompanhamento.turno %></div>
+                <b>Ano Letivo:</b>
+                <div style="max-width: 70px;" class="text-line"><%= acompanhamento.ano_letivo %></div>
+                <b>Período Letivo:</b>
+                <div style="max-width: 70px;" class="text-line"><%= relatorio_experiencia[0].periodo_letivo %></div>
             </div>
         </div>
+        <br>
+        <h2 class="text-center">FICHA DE ACOMPANHAMENTO</h2>
         <br>
         <br>
         <% if (tipo_relatorio_acompanhamento === "Descritiva") { %>
@@ -41,16 +47,10 @@
         <% if (tipo_relatorio_acompanhamento === "Objetiva") { %>
             <%- include("../reusable/ficha-acompanhamento/lista-relatorio-objetivo.ejs") %> 
         <% } %>
-        <div class="flex flex-column" style="margin-top: 10px;">
-                <% for (let i = 0; i < 5; i++) { %>
-                <div class="flex">
-                    <% if (i === 0) { %>
-                    <b>Descrição:</b>
-                    <% } %>
-                    <div style="flex-grow: 1;" class="text-line">&ensp;</div>
-                </div>
-                <% } %>
-        </div>
+        <% if (tipo_relatorio_acompanhamento === "outros") { %>
+            <%- include("../reusable/ficha-acompanhamento/ficha_acompanhaemnto_objetivo_2.ejs") %> 
+        <% } %>
+
         <%- include("../reusable/campo-assinatura-direcao.ejs") %> 
     </div>
 </body>

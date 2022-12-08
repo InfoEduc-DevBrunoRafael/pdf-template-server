@@ -147,182 +147,217 @@
         </div>
     </div>
     <% lista_alunos.sort((a, b) => a.nome_aluno.localeCompare(b.nome_aluno)).forEach(aluno => { %>
-    <div class="page-break" style="margin: 10px;">
-        <div style="display: flex; margin-bottom: 10px">
-            <div class="flex flex-column" style="gap: 5px;">
-                <div class="multicolumn inline">
-                    <b>Aluno (a):</b>
-                    <div class="text-line"><%= aluno.nome_aluno %></div>
-                    <% if (tipo_documento === "Infantil") { %>
-                    <% if (aluno.possui_nee === true) { %>
-                    <b>NEE:</b>
-                    <div class="text-line"><%= aluno.especificacao_nee %></div>
-                    <% } %>
-                    <% } %>
-                </div>
-                <div class="multicolumn inline">
-                    <b>Prof (a):</b>
-                    <div class="text-line"><%= diario.nome_professor %></div>
-                    <b>Turma:</b>
-                    <div class="text-line"><%= diario.turma %></div>
-                    <b>Ano Letivo:</b>
-                    <div style="max-width: 60px;" class="text-center text-line"><%= diario.ano_letivo %></div>
+        <div class="page-break" style="margin: 10px;">
+            <div style="display: flex; margin-bottom: 10px">
+                <div class="flex flex-column" style="gap: 5px;">
+                    <div class="multicolumn inline">
+                        <b>Aluno (a):</b>
+                        <div class="text-line"><%= aluno.nome_aluno %></div>
+                        <% if (tipo_documento === "Infantil") { %>
+                        <% if (aluno.possui_nee === true) { %>
+                        <b>NEE:</b>
+                        <div class="text-line"><%= aluno.especificacao_nee %></div>
+                        <% } %>
+                        <% } %>
+                    </div>
+                    <div class="multicolumn inline">
+                        <b>Prof (a):</b>
+                        <div class="text-line"><%= diario.nome_professor %></div>
+                        <b>Turma:</b>
+                        <div class="text-line"><%= diario.turma %></div>
+                        <b>Ano Letivo:</b>
+                        <div style="max-width: 60px;" class="text-center text-line"><%= diario.ano_letivo %></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <% if (aluno.frequencia) { %>
-        <%- include("../reusable/diario-classe/frequencia.ejs", { frequencia: aluno.frequencia, ano_letivo }) %>
-        <% } %>
-        <% if (aluno.notas) { %>
-
-        <% if (tipo_documento === "Fundamental") { %>
-
-        <% var notaResList = null; if (notaResList) { %>
-        <h3 style="text-align: center; font-weight: bold; text-transform: uppercase; text-decoration: underline;">
-
-            Resultado Bimestral
-        </h3>
-        <div style="margin: 0 50px;">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <td class="text-center">
-                            Média
-                        </td>
-                        <td class="text-center">
-                            Rec.
-                        </td>
-                        <td class="text-center">
-                            Méd.<br>Final
-                        </td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <% notaResList.forEach(res => { %>
-                        <td class="text-center">
-                            <%= res %>
-                        </td>
-                        <% }) %>
-                        <td class="text-center">
-                            <%= resultadoMedia %>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div> 
-        
-        <% } %>
-        <% } %>
-        <% } %>
-        <% if (tipo_documento === "Infantil") { %>
-        <div style="margin-top: 10px;">
-            <%# TODO: Relatório Descritivo %>
-            <% if (aluno.relatorio_experiencia) { %>
-            <h3 class="text-center"><u>AVALIAÇÃO</u></h3>
-            <%- include("../reusable/ficha-acompanhamento/lista-relatorio-objetivo.ejs", { relatorio_experiencia: aluno.relatorio_experiencia }) %>
+            <% if (aluno.frequencia) { %>
+            <%- include("../reusable/diario-classe/frequencia.ejs", { frequencia: aluno.frequencia, ano_letivo }) %>
             <% } %>
-        </div>
-        <% } %>
-        <br />
-        <div class="avoid-break" style="display: flex; gap: 50px">
-            <% if (tipo_documento !== "Infantil") { %>
-            <table style="border-spacing: 0;">
-                <thead>
-                    <tr>
-                        <th style="border: 1px solid;" colspan="2" class="text-center">Resultado Final</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (!aluno.notas == null) { %>
-                        
+            <% if (aluno.notas) { %>
+
+            <% if (tipo_documento === "Fundamental") { %>
+            
+            <% var notaResList = null; if (notaResList) { %>
+            <h3 style="text-align: center; font-weight: bold; text-transform: uppercase; text-decoration: underline;">
+
+                Resultado Bimestral
+            </h3>
+            <div style="margin: 0 50px;">
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td>Média Anual</td>
-                            <td class="fixed-width text-center">
-                                <%= aluno.notas.reduce((prev, { nota_avaliacao }) => prev + nota_avaliacao, 0) / notas.length %>
+                            <td class="text-center">
+                                Média
+                            </td>
+                            <td class="text-center">
+                                Rec.
+                            </td>
+                            <td class="text-center">
+                                Méd.<br>Final
                             </td>
                         </tr>
-                        
-                    <% } %>
-                    <% if (aluno.frequencia) { %>
+                    </thead>
+                    <tbody>
                         <tr>
-                            <td>Total de Faltas</td>
-                            <td class="fixed-width text-center">
-                                <%= aluno.frequencia.reduce((prev, { qtd_faltas }) => prev + qtd_faltas, 0) %>
+                            <% notaResList.forEach(res => { %>
+                            <td class="text-center">
+                                <%= res %>
+                            </td>
+                            <% }) %>
+                            <td class="text-center">
+                                <%= resultadoMedia %>
                             </td>
                         </tr>
-                    <% } %>
-                    <tr>
-                        <%# TODO: ? %>
-                        <td>Nota de Rec. Final</td>
-                        <td class="fixed-width text-center"></td>
-                    </tr>
-                    <tr>
-                        <%# TODO: ? %>
-                        <td>Média Final</td>
-                        <td class="fixed-width text-center"></td>
-                    </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div> 
+            
             <% } %>
-            <div>
+            <% } %>
+            <% } %>
+            <div class="avoid-break" style="display: flex; gap: 50px">
                 <% if (tipo_documento !== "Infantil") { %>
-                <input id="aprovado" <%= aluno.aprovado ? "checked" : "" %> type="checkbox" />
-                <label for="aprovado">Aprovado</label>
-                <br />
-                <input id="reprovado" <%= aluno.reprovado ? "checked" : "" %> type="checkbox" />
-                <label for="reprovado">Reprovado</label>
-                <br />
+                    <br>
+                    <table style="border-spacing: 0; margin-left: -30px;">
+                        <thead>
+                            <tr>
+                                <th style="border: 1px solid;" colspan="2" class="text-center">Resultado Final</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (!aluno.notas == null) { %>
+                                
+                                <tr>
+                                    <td>Média Anual</td>
+                                    <td class="fixed-width text-center">
+                                        <%= aluno.notas.reduce((prev, { nota_avaliacao }) => prev + nota_avaliacao, 0) / notas.length %>
+                                    </td>
+                                </tr>
+                                
+                            <% } %>
+                            <% if (aluno.frequencia) { %>
+                                <tr>
+                                    <td>Total de Faltas</td>
+                                    <td class="fixed-width text-center">
+                                        <%= aluno.frequencia.reduce((prev, { qtd_faltas }) => prev + qtd_faltas, 0) %>
+                                    </td>
+                                </tr>
+                            <% } %>
+                            <tr>
+                                <%# TODO: ? %>
+                                <td>Nota de Rec. Final</td>
+                                <td class="fixed-width text-center"></td>
+                            </tr>
+                            <tr>
+                                <%# TODO: ? %>
+                                <td>Média Final</td>
+                                <td class="fixed-width text-center"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 <% } %>
-                <div class="flex" style="gap: 30px;">
-                    <div>
-                        <input id="transferido" <%= aluno.transferido ? "checked" : "" %> type="checkbox" />
-                        <label for="transferido">Transferido</label>
-                        <div style="margin-left: 5px; display: flex; float: right">
-                            <% 
-                            const transferido = aluno.status === "Transferido"
-                            let dataTransferido
-                            if (transferido === true)
-                                dataTransferido = new Date(aluno.transferido_data) %>
-                            <div style="min-width: 30px" class="text-line text-center">
-                                <%= transferido ? padWithZero(dataTransferido.getDate()) : "" %>
-                            </div>
-                            /
-                            <div style="min-width: 30px" class="text-line text-center">
-                                <%= transferido ? padWithZero(dataTransferido.getMonth() + 1) : "" %>
-                            </div>
-                            /
-                            <div style="min-width: 50px" class="text-line text-center">
-                                <%= transferido ? dataTransferido.getFullYear() : "" %>
+                
+                <% if (tipo_documento == "Infantil") { %>
+                    <table style="border-spacing: 0;">
+                        <thead>
+                            <tr>
+                                <th style="border: 1px solid;" colspan="2" class="text-center">Resultado Final</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%# var dias_letivos = null %> 
+                            <tr>
+                                <td>Dias letivos</td>
+                                <td class="fixed-width text-center">
+                                    <%#= dias_letivos %>
+                                </td>
+                            </tr>
+                            
+                            <% if (aluno.frequencia) { %>
+                                <tr>
+                                    <td>Total de Faltas</td>
+                                    <td class="fixed-width text-center">
+                                        <%= aluno.frequencia.reduce((prev, { qtd_faltas }) => prev + qtd_faltas, 0) %>
+                                    </td>
+                                </tr>
+                            <% } %>
+                            <tr>
+                                <%#var frequenciaPorcentagem = null %> 
+                                <td>Frequência %</td>
+                                <td class="fixed-width text-center"><%#= frequenciaPorcentagem %> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                <% } %>
+                
+                <div>
+                    <% if (tipo_documento !== "Infantil") { %>
+                        <input id="aprovado" <%= aluno.aprovado ? "checked" : "" %> type="checkbox" />
+                        <label for="aprovado">Aprovado</label>
+                        <br />
+                        <input id="reprovado" <%= aluno.reprovado ? "checked" : "" %> type="checkbox" />
+                        <label for="reprovado">Reprovado</label>
+                        <br />
+                    <% } %>
+                    <div class="flex" style="gap: 30px;">
+                        <div>
+                            <input id="transferido" <%= aluno.transferido ? "checked" : "" %> type="checkbox" />
+                            <label for="transferido">Transferido</label>
+                            <div style="margin-left: 5px; display: flex; float: right">
+                                <% 
+                                const transferido = aluno.status === "Transferido"
+                                let dataTransferido
+                                if (transferido === true)
+                                    dataTransferido = new Date(aluno.transferido_data) %>
+                                <div style="min-width: 30px" class="text-line text-center">
+                                    <%= transferido ? padWithZero(dataTransferido.getDate()) : "" %>
+                                </div>
+                                /
+                                <div style="min-width: 30px" class="text-line text-center">
+                                    <%= transferido ? padWithZero(dataTransferido.getMonth() + 1) : "" %>
+                                </div>
+                                /
+                                <div style="min-width: 50px" class="text-line text-center">
+                                    <%= transferido ? dataTransferido.getFullYear() : "" %>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <input id="transferido" <%= aluno.desistente ? "checked" : "" %> type="checkbox" />
-                        <label for="transferido">Desistente</label>
-                        <div style="margin-left: 5px; display: flex; float: right">
-                            <% 
-                                const desistente = aluno.status === "Desistente"
-                                let desistenteData
-                                if (desistente === true)
-                                    desistenteData = new Date(aluno.desistente_data) %>
-                            <div style="min-width: 30px" class="text-line text-center">
-                                <%= desistente ? padWithZero(desistenteData.getDate()) : "" %>
-                            </div>
-                            /
-                            <div style="min-width: 30px" class="text-line text-center">
-                                <%= desistente ? padWithZero(desistenteData.getMonth() + 1) : "" %>
-                            </div>
-                            /
-                            <div style="min-width: 50px" class="text-line text-center">
-                                <%= desistente ? desistenteData.getFullYear() : "" %>
+                        <div>
+                            <input id="transferido" <%= aluno.desistente ? "checked" : "" %> type="checkbox" />
+                            <label for="transferido">Desistente</label>
+                            <div style="margin-left: 5px; display: flex; float: right">
+                                <% 
+                                    const desistente = aluno.status === "Desistente"
+                                    let desistenteData
+                                    if (desistente === true)
+                                        desistenteData = new Date(aluno.desistente_data) %>
+                                <div style="min-width: 30px" class="text-line text-center">
+                                    <%= desistente ? padWithZero(desistenteData.getDate()) : "" %>
+                                </div>
+                                /
+                                <div style="min-width: 30px" class="text-line text-center">
+                                    <%= desistente ? padWithZero(desistenteData.getMonth() + 1) : "" %>
+                                </div>
+                                /
+                                <div style="min-width: 50px" class="text-line text-center">
+                                    <%= desistente ? desistenteData.getFullYear() : "" %>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <% if (tipo_documento === "Infantil") { %>
+            <div style="margin-top: 10px;">
+                <%# TODO: Relatório Descritivo %>
+                <% if (aluno.relatorio_experiencia) { %>
+                <h3 class="text-center"><u>AVALIAÇÃO</u></h3>
+                <%- include("../reusable/ficha-acompanhamento/lista-relatorio-objetivo.ejs", { relatorio_experiencia: aluno.relatorio_experiencia }) %>
+                <% } %>
+            </div>
+            <% } %>
+            <br />
         </div>
-    </div>
     <% }) %>
     
     <div class="page-break" style="margin: 10px;">

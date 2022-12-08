@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="http://localhost:2000/assets/css/font.css">
+    <meta charset="UTF-8">
+    <% include("../reusable/utils.ejs") %>
+    <style>
+        .lineheightsmall {
+            line-height: 1.4;
+        }
+        .grow {
+            flex-grow: 1;
+        }
+        .flex-column {
+            flex-direction: column;
+        }
+        .text-line {
+            border-bottom: 1px solid;
+            flex: 1;
+        }
+
+        table.aluno-info-table {
+            width: 100%;
+            text-transform: uppercase;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table.aluno-info-table tbody tr {
+            border: solid 0.5px;
+        }
+
+        table.aluno-info-table tbody tr td {
+            border: solid 0.5px;
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        p.legenda {
+            font-size: 12px;
+        }
+
+    </style>
+</head>
+<body style="margin: 30px;">
+    
+    <%- include("../css/common.ejs") %>
+
+    <div>
+
+        <%
+
+            lista_alunos.sort((a, b) => a.nome_aluno.localeCompare(b.nome_aluno));
+
+            function getNomeResponsavel(alunoID, type = 'mae') {
+                
+                let result;
+
+                if(type === 'mae') {
+
+                    result = alunoMaesArray.find(registro => registro.id_aluno === alunoID);
+                    if(result) return result.nome_da_mae;
+
+                }
+
+                if(type === 'pai') {
+
+                    result = alunoPaisArray.find(registro => registro.id_aluno === alunoID);
+                    if(result) return result.nome_do_pai;
+
+                }
+
+                return '';
+
+            }
+
+        %>
+
+        <% lista_alunos.forEach(aluno=>{ %>
+
+            <div class="page-break">
+
+                <%- include("../reusable/header-escola-codigo-inep.ejs") %>
+
+                <table class="aluno-info-table">
+                    <thead>
+                        <tr>
+                            <th colspan="10">
+                                <h3 class="text-center">
+                                    <strong><u>REGISTRO DE FALTAS</u></strong>
+                                </h3>
+                            </th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="7"><strong>Aluno(a):</strong> <%= aluno.nome_aluno %></td>
+                            <td colspan="3"><strong>Status:</strong> <%= aluno.status %></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"><strong>Endereço:</strong> <%= aluno.endereco %></td>
+                            <td colspan="3"><strong>Cidade:</strong> <%= aluno.cidade %></td>
+                            <td colspan="1"><strong>UF:</strong> <%= aluno.uf %></td>
+                            <td colspan="2"><strong>CEP:</strong> <%= aluno.cep %></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5"><strong>Nome do pai:</strong> <%= getNomeResponsavel(aluno.id_aluno, 'pai') %></td>
+                            <td colspan="5"><strong>Nome da mãe:</strong> <%= getNomeResponsavel(aluno.id_aluno, 'mae') %></td>
+                        </tr>
+                        <tr>
+                            <td colspan="7"><strong>Turma:</strong> <%= aluno.nome_turma %></td>
+                            <td colspan="3"><strong>Ano letivo:</strong> <%= aluno.ano_letivo %></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <%-
+                    include("../reusable/diario-classe/frequencia-com-rodape.ejs", {
+                        frequencia: aluno.frequencia,
+                        ano_letivo: aluno.ano_letivo,
+                        quantidade_dias_letivos: aluno.quantidade_dias_letivos,
+                        quantidade_aulas_diarias
+                    });
+                %>
+
+                <p class="legenda" style="margin-top: -1px;"><b>Legenda:</b> " * " - Falta justificada</p>
+
+                <% if(diario.tipo_documento && diario.tipo_documento.trim().toLowerCase() !== 'infantil'){ %>
+                    <p class="legenda"><b>OBS:</b> Neste documento consta todas as faltas que os alunos receberam no dia e mês de todos os componentes curriculares.</p>
+                <% } %>
+
+                <div style="break-inside: avoid;">
+                    <div style="padding-top: 10px;">
+                        <div class="flex padding-top dont-break" style="gap: 10px;">
+                            <div class="flex flex-column" style="max-width: 49%;">
+                                <div class="text-line"></div>
+                                <div class="small-text"><strong>Assinatura da Coordenação Pedagógica</strong></div>
+                            </div>
+                            <div class="flex flex-column" style="max-width: 49%;">
+                                <div class="text-line"></div>
+                                <div class="small-text"><strong>Assinatura do Diretor(a)</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        <% }); %>
+
+    </div>
+</body>
+</html>

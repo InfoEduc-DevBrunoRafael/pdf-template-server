@@ -1,0 +1,82 @@
+<!--
+    Aqui somamos a quantidade total de faltas do aluno, além da quantidade de presenças. Dessa forma podemos exibir na tela sua % de frequência, e sua quantidade de faltas.
+-->
+<% const qtdFaltasAluno = (Array.isArray(aluno.frequencia)) ? aluno.frequencia.reduce((previousValue, currentValue) => previousValue + currentValue.qtd_faltas, 0) : 0; %>
+<% const qtdPresencasAluno = (Array.isArray(aluno.frequencia)) ? aluno.frequencia.reduce((previousValue, currentValue) => previousValue + currentValue.qtd_presenca, 0) : 0; %>
+
+<div class="informacoes-aluno">
+
+    <div>
+        <b>Aluno(a):</b>
+        <div class="text-line"><%= aluno.nome_aluno %></div>
+    </div>
+
+    <div>
+        <b>ID da InfoEduc:</b>
+        <div class="text-line"><%= aluno.codigo_infoeduc %></div>
+    </div>
+
+</div>
+
+<%- include('./frequencia', { frequencia: (Array.isArray(aluno.frequencia)) ? aluno.frequencia : [] }) -%>
+
+<div class="footer-frequencia">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <td colspan="2">Resultado final</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Total de Faltas</td>
+                <td><%= qtdFaltasAluno %></td>
+            </tr>
+            <tr>
+                <td>Nº de Dias Letivos</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Frequência %</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="additional-info">
+
+        <% const alunoTransferido = Boolean(aluno.aluno_transferido); %>
+        <% const alunoDesistente = Boolean(aluno.aluno_desistente); %>
+
+        <div>
+            (<%= (alunoTransferido) ? 'X' : '' %>) Transferido
+            <div class="text-line">
+
+                <% if(alunoTransferido){ %>
+                    <!--
+                        Aqui precisamos pegar a data que foi passada, e renderizar ela usando as linhas abaixo e barras. O mesmo serve para a desistência
+                    -->
+                <% } else { %>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <% } %>
+
+            </div>
+        </div>
+
+        <div>
+            (<%= (alunoDesistente) ? 'X' : '' %>) Desistente
+            <div class="text-line">
+
+                <% if(alunoDesistente){ %>
+                    
+                <% } else { %>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <% } %>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>

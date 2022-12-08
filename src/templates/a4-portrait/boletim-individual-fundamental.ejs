@@ -52,7 +52,8 @@
     }
 
     const notasGroup = groupByProperty(aluno.notas, "grupo_disciplina")
-    const frequenciaGroup = groupByProperty(aluno.frequencia, "grupo_disciplina")
+    console.log(notasGroup);
+    //const frequenciaGroup = groupByProperty(aluno.frequencia, "grupo_disciplina")
     %> 
     <h3 class="page-title">BOLETIM ESCOLAR</h3>
     <table class="table">
@@ -64,14 +65,10 @@
                     Curriculares
                 </th>
                 <th colspan="<%= periodos_letivos.length %>">Notas</th>
-                <th colspan="<%= periodos_letivos.length %>">Faltas</th>
                 <th rowspan="0">Soma das Médias</th>
                 <th rowspan="0">Total de Faltas</th>
             </tr>
             <tr>
-                <% periodos_letivos.forEach(periodo => { %>
-                    <th><%= periodo %></th>
-                <% }) %>
                 <% periodos_letivos.forEach(periodo => { %>
                     <th><%= periodo %></th>
                 <% }) %>
@@ -104,41 +101,11 @@
                         <% } %>
 
                         <% let totalFaltasDisciplina = 0 %> 
-                        <% let somaMedia = 0 %> 
-                        <%# Nome da disciplina %> 
-                        <td><%= nomeDisciplina %></td>
-                        <% periodos_letivos.forEach(periodo => { %>
-                            <% const notas = disciplinas.get(nomeDisciplina)
-                                .filter(nota => nota.nome_periodo_letivo === periodo) %>
-                            
-                            <% const scope = {} %>
-                            <% notas.forEach(nota => { %>
-                                <% const alias = nota.alias_avaliacao %>
-                                <% scope[alias] = nota.nota_avaliacao %>
-                            <% }) %>
-                            <% try { %>
-                                <% const evaluated = math.evaluate(formula_media, scope) %>
-                                <% somaMedia += evaluated %>
-                                <td class="text-center"><%= evaluated %></td>
-                            <% } catch(e) { %>
-                                <% console.error(`Falha ao calcular média da disciplina ${periodo}`, e) %> 
-                                <td class="text-center">-</td>
-                            <% } %>
-                        <% }) %>
-                        <% periodos_letivos.forEach(periodo => { %>
-                            <% const frequenciaPeriodo = frequenciaGroup.get(grupoDisciplina)
-                                .filter(freq => freq.nome_periodo_letivo === periodo && freq.nome_disciplina === nomeDisciplina) %>
-                            
-                            <% let totalFaltas = 0 %> 
 
-                            <% frequenciaPeriodo.map(freq => freq.qtd_faltas).forEach(falta => { %>
-                                <% totalFaltas += falta %>
-                                <% totalFaltasDisciplina += falta %> 
-                            <% }) %>
-                            <td class="text-center">
-                                <%= totalFaltas %> 
-                            </td>
-                        <% }) %>
+
+                        <td><%= nomeDisciplina %></td>
+                    
+                       
                         <td class="text-center"><%= somaMedia %></td>
                         <td class="text-center"><%= totalFaltasDisciplina %></td>
                         

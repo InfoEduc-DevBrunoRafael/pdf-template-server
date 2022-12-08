@@ -72,9 +72,11 @@
                 </tr>
     
                 <tr>
-                    <th colspan="<%= unidade.length/2 %>"><%= grupo_avaliativo[0] %></th>
-                    <th colspan="<%= unidade.length/2 %>"><%= grupo_avaliativo[1] %></th>
-                    
+                    <%# grupo_avaliativo.forEach(element => { %>
+                        
+                        <th colspan="<%= unidade.length/2 %>"><%= grupo_avaliativo[0] %></th>
+                        <th colspan="<%= unidade.length/2 %>"><%= grupo_avaliativo[1] %></th>
+                    <%# }) %>
                 </tr>
                 <tr>
                     <% unidade.forEach(element => { %>

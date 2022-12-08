@@ -72,13 +72,15 @@
                                     Objetivos de Aprendizagem e Desenvolvimento
                                 </div>
                                 <div class="flex avoid-break">
-                                    <% const objetivos = item.lista_objetivo_aprendizagem %>
+                                   
                                     <div class="item-border flex flex-column grow">
+                                        <% var objetivos = item.lista_objetivo_aprendizagem %>
                                         <% objetivos.forEach(texto => { %>
                                             <div class="flex pad">
                                                 &bull; <%= texto %><br>
                                             </div>
-                                            <% }) %> 
+                                        <% }) %> 
+                                    
                                         </div>
                                         <div class="item-border flex flex-column" style="gap: 15px; flex-grow: 0; padding: 10px 5px;">
                                             <div class="text-center" style="font-size: 15px;">
@@ -96,10 +98,12 @@
                                 <div class="item-border pad">
                                     <%= item.descricao_avaliativa %> 
                                 </div>
-                                <% }) %>
                             </div>
-                    <% } %>
+                        <% }) %>
+                    </div>
+                <% } %> 
             <% } %>
-        <% } %> 
+        <% } %>
+    </div>
     </div>
 </div>

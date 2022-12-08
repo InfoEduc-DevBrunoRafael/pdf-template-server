@@ -1,0 +1,793 @@
+<html>
+
+    <% include("../reusable/utils.ejs") %>
+    
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="http://localhost:2000/assets/css/font.css">
+    </head>
+    <style media="all">
+        .text-center {
+            text-align: center;
+        }
+    
+        .text-line {
+            border-bottom: 1px solid;
+            flex: 1;
+            text-align: left;
+            padding-left: 10px;
+            font-size: 13px;
+        }
+    
+        .page-break {
+            break-after: page;
+            padding-bottom: 20px;
+        }
+    
+        .table {
+            width: 100%;
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+    
+        .avoid-break {
+            break-inside: avoid;
+        }
+    
+        .item-border {
+            border: 1px solid;
+            padding: 5px;
+        }
+    
+        .bold {
+            font-weight: bold;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .header img {
+            width: 82px;
+            height: 82px;
+        }
+
+        .header .info-escola h2,
+        .header .info-escola p {
+            margin: 0;
+        }
+
+        .title {
+            font-weight: bold;
+            text-decoration: underline;
+            text-transform: uppercase;
+        }
+
+        .table thead th {
+            font-weight: normal;
+        }
+
+        /*.table tr {
+            display: flex;
+        }*/
+
+        .table tr td,
+        .table th {
+            /*width: 100%;*/
+            border: solid 1px;
+            padding: 5px;
+            text-align: -webkit-center;
+        }
+
+        .table tr td p.vertical-text {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            font-size: 10px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        /*.table tr td.nome-aluno {
+            position: absolute;
+            width: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .table tr td.after-aluno-nome {
+            margin-left: 191px;
+        }*/
+
+        .table tr.aluno-notas-tr td {
+            height: 10px;
+            font-size: 10px;
+        }
+
+        p.legenda {
+            font-size: 12px;
+        }
+
+    </style>
+    
+    <%- include("../css/common.ejs") %>
+
+    <body>
+
+        <%
+
+            /*
+                Aqui ocorre toda a lógica de agrupamento dos dados do template. Não foi possível realizar esse agrupamento de forma eficaz no bubble.io
+            */
+
+            const validAtividadesAvaliativas = atividadeAvaliativaArray.filter(atividade => atividade.id_grupo_atividade !== undefined);
+
+            const atividadesAvaliativas = validAtividadesAvaliativas.map(atividade=>{
+
+                atividade.grupo_avaliativo = gruposAtividadeArray.find(grupo => grupo.id_grupo_avaliativo === atividade.id_grupo_atividade);
+                return atividade;
+
+            });
+
+            const notas = notasArray.map(nota=>{
+
+                nota.atividade_avaliativa = atividadesAvaliativas.find(atividade => atividade.id_atividade_avaliativa === nota.id_atividade_avaliativa);
+                return nota;
+
+            });
+
+            const alunos = listaAlunosMap.map(aluno=>{
+
+                aluno.notas = notas.filter(nota => nota.id_aluno === aluno.id_aluno);
+                return aluno;
+
+            });
+
+            alunos.sort((a, b) => a.nome_aluno.localeCompare(b.nome_aluno));
+
+            function getAtividadesFromGrupoID(grupoID) {
+                
+                const results = atividadesAvaliativas.filter(atividade => atividade.id_grupo_atividade === grupoID);
+                return results;
+
+            }
+
+            function getAlunosFromDisciplina(disciplinaID){
+
+                const results = alunos.filter(aluno => aluno.id_disciplina === disciplinaID);
+                return results;
+
+            }
+
+            function getAlunoNotaFromColumnAtividadeID(notas, column, disciplinaID){
+
+                const registroNota = notas.find(nota=>{
+
+                    if(nota && nota.atividade_avaliativa && nota.atividade_avaliativa.grupo_avaliativo){
+
+                        const grupo = nota.atividade_avaliativa.grupo_avaliativo;
+
+                        if(column.id){
+
+                            // busca as notas pelo ID da atividade
+                            return (column.id === nota.id_atividade_avaliativa && column.grupoID === grupo.id_grupo_avaliativo && nota.id_disciplina === disciplinaID);
+
+                        }
+
+                    }
+
+                });
+
+                return registroNota;
+
+            }
+
+            function getProporcaoParaColunaNota(columnProporcao, proporcaoDiff, nextGrupoID, columnGrupoID){
+
+                let proporcao;
+
+                if(nextGrupoID !== columnGrupoID){
+
+                    proporcao = (proporcaoDiff > 0) ? columnProporcao + proporcaoDiff : columnProporcao;
+
+                } else {
+                    proporcao = columnProporcao;
+                }
+
+                return proporcao;
+
+            }
+
+            function getAlunoNotasPorGrupoDisciplina(alunoNotas, grupoID, disciplinaID){
+
+                const atividadesAvaliativasHahstable = {};
+
+                const validNotas = alunoNotas.filter(nota=>{
+
+                    if(nota){
+
+                        const atividade_avaliativa = nota.atividade_avaliativa;
+
+                        if(atividade_avaliativa) {
+
+                            const grupo_avaliativo = atividade_avaliativa.grupo_avaliativo;
+
+                            if(grupo_avaliativo && grupo_avaliativo.id_grupo_avaliativo && !atividadesAvaliativasHahstable[nota.id_atividade_avaliativa]){
+
+                                if(grupo_avaliativo.id_grupo_avaliativo === grupoID && nota.id_disciplina === disciplinaID){
+
+                                    atividadesAvaliativasHahstable[nota.id_atividade_avaliativa] = true;
+                                    return true;
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    
+                });
+
+                return validNotas;
+
+            }
+
+            function getMediaPeriodo(grupoID, alunoNotas, disciplinaID, alunoID){
+
+                const validNotas = getAlunoNotasPorGrupoDisciplina(alunoNotas, grupoID, disciplinaID);
+
+                const totalPontos = validNotas.reduce((prev, current) => prev + current.nota_final_avaliacao, 0);
+
+                const registroGrupo = gruposAtividadeArray.find(grupo => grupo.id_grupo_avaliativo === grupoID);
+
+                const atividadesDoGrupo = atividadeAvaliativaArray.filter(atividade => atividade.id_grupo_atividade === grupoID);
+
+                if(registroGrupo && registroGrupo.formula_calculo === 'Média Aritmética'){
+
+                    const media = totalPontos / atividadesDoGrupo.length;
+                    if(!isNaN(media)) return (media % 1 > 0) ? Number((media).toFixed(1)) : media;
+                    return '';
+
+                } else if(registroGrupo && registroGrupo.formula_calculo === 'Soma') {
+                    return (totalPontos % 1 > 0) ? Number((totalPontos).toFixed(1)) : totalPontos;
+                }
+
+            }
+
+            function getRecuperacao(grupoID, alunoNotas, disciplinaID, alunoID, returnNotaRecuperacao = true){
+
+                //const validNotas = getAlunoNotasPorGrupoDisciplina(alunoNotas, grupoID, disciplinaID);
+                const registro = notasRecuperacaoGrupoArray.find((nota)=>{
+
+                    return (alunoID === nota.id_aluno && nota.id_disciplina === disciplinaID && grupoID === nota.id_grupo_atividade && nota.nota_recuperacao !== undefined && nota.nota_recuperacao !== null);
+
+                });
+
+                if(registro){
+
+                    return (returnNotaRecuperacao === true) ? registro.nota_recuperacao : registro.media_final_grupo;
+
+                } else {
+                    return '';
+                }
+
+            }
+
+            function getMediaFinalPeriodo(grupoID, alunoNotas, disciplinaID, alunoID){
+
+                const recuperacaoPeriodo = getRecuperacao(grupoID, alunoNotas, disciplinaID, alunoID, false);
+                const mediaPeriodo = getMediaPeriodo(grupoID, alunoNotas, disciplinaID, alunoID);
+
+                if(typeof recuperacaoPeriodo === 'number' && recuperacaoPeriodo >= mediaPeriodo) {
+
+                    return (recuperacaoPeriodo % 1 > 0) ? Number((recuperacaoPeriodo).toFixed(1)) : recuperacaoPeriodo;
+
+                } else {
+                    return (mediaPeriodo % 1 > 0) ? Number((mediaPeriodo).toFixed(1)) : mediaPeriodo;
+                }
+
+            }
+
+            function getTotalDePontosAnuais(alunoNotas, disciplinaID, alunoID){
+
+                let totalPontos = 0;
+
+                gruposAtividadeArray.forEach(grupo=>{
+                    
+                    const pontos = getMediaFinalPeriodo(grupo.id_grupo_avaliativo, alunoNotas, disciplinaID, alunoID);
+                    totalPontos += Number(pontos);
+
+                });
+
+                return (totalPontos % 1 > 0) ? Number((totalPontos).toFixed(1)) : totalPontos;
+
+            }
+
+            function getMediaAnual(alunoNotas, disciplinaID, alunoID){
+
+                const totalPontosAnuais = getTotalDePontosAnuais(alunoNotas, disciplinaID, alunoID);
+                const quantidadeGrupos = gruposAtividadeArray.length;
+
+                if(turma.formula_calculo_criterio === 'Média Aritmética'){
+
+                    const media = totalPontosAnuais / quantidadeGrupos;
+                    if(!isNaN(media)) return (media % 1 > 0) ? Number((media).toFixed(1)) : media;
+                    return '';
+
+                } else if(turma.formula_calculo_criterio === 'Soma') {
+                    return (totalPontosAnuais % 1 > 0) ? Number((totalPontosAnuais).toFixed(1)) : totalPontosAnuais;
+                }
+
+            }
+
+            function getRecuperacaoFinal(alunoNotas, disciplinaID, alunoID, returnNotaRecuperacao = true){
+
+                if(turma.permitir_recuperacao_anual) {
+
+                    //const validNotas = alunoNotas.filter(nota => nota.id_disciplina === disciplinaID);
+                    const registro = notasRecuperacaoAnualArray.find((nota)=>{
+                        
+                        return (alunoID === nota.id_aluno && nota.id_disciplina === disciplinaID && nota.nota_recuperacao !== null && nota.nota_recuperacao !== undefined);
+                        
+                    });
+                    
+                    if(registro){
+
+                        return (returnNotaRecuperacao === true) ? registro.nota_recuperacao : registro.media_final_anual;
+
+                    } else {
+                        return '';
+                    }
+
+                }
+
+                return null;
+
+            }
+
+            function getMediaFinal(alunoNotas, disciplinaID, alunoID){
+
+                const recuperacaoAnual = getRecuperacaoFinal(alunoNotas, disciplinaID, alunoID, false);
+                const mediaAnual = getMediaAnual(alunoNotas, disciplinaID, alunoID);
+                
+                if(typeof recuperacaoAnual === 'number' && recuperacaoAnual >= mediaAnual) {
+
+                    return (recuperacaoAnual % 1 > 0) ? Number((recuperacaoAnual).toFixed(1)) : recuperacaoAnual;
+
+                } else {
+                    return (mediaAnual % 1 > 0) ? Number((mediaAnual).toFixed(1)) : mediaAnual;
+                }
+
+            }
+
+            function getSituacaoFinal(alunoNotas, disciplinaID, alunoID){
+
+                const totalPontosAnuais = getTotalDePontosAnuais(alunoNotas, disciplinaID, alunoID);
+                const mediaFinal = getMediaFinal(alunoNotas, disciplinaID, alunoID);
+
+                const pontos_aprovacao_anual = turma.pontos_aprovacao_anual;
+                const pontos_aprovacao_periodo = turma.pontos_aprovacao_periodo;
+
+                if((typeof pontos_aprovacao_anual === 'number' && totalPontosAnuais >= pontos_aprovacao_anual) || (typeof pontos_aprovacao_periodo === 'number' && mediaFinal >= pontos_aprovacao_periodo)) return 'Aprovado';
+
+                return 'Reprovado';
+
+            }
+
+            function getAlunoStatus(alunoID, sigla){
+
+                const aluno = alunos.find(aluno => aluno.id_aluno === alunoID);
+
+                if(aluno){
+                    const status = (aluno.status) ? aluno.status.toLowerCase() : '';
+                    return status;
+                }
+
+                return '';
+
+            }
+
+            function getAlunoNotaPorSigla(sigla, grupoID, alunoNotas, disciplinaID, alunoID){
+                
+                const status = getAlunoStatus(alunoID, sigla);
+
+                if(status === 'transferido') return (sigla === 'Situação') ? 'Transferido' : 'T';
+                if(status === 'desistente') return (sigla === 'Situação') ? 'Desistente' : 'D';
+                if(status === 'trancado') return (sigla === 'Situação') ? 'Trancado' : 'TR';
+
+                if(sigla === 'MP'){
+                    return getMediaPeriodo(grupoID, alunoNotas, disciplinaID, alunoID);
+                } else if(sigla === 'REC') {
+                    return getRecuperacao(grupoID, alunoNotas, disciplinaID, alunoID);
+                } else if(sigla === 'MFP') {
+                    return getMediaFinalPeriodo(grupoID, alunoNotas, disciplinaID, alunoID);
+                } else if(sigla === 'TPA') {
+                    return getTotalDePontosAnuais(alunoNotas, disciplinaID, alunoID);
+                } else if(sigla === 'MA') {
+                    return getMediaAnual(alunoNotas, disciplinaID, alunoID);
+                } else if(sigla === 'RF') {
+                    return getRecuperacaoFinal(alunoNotas, disciplinaID, alunoID);
+                } else if(sigla === 'MF') {
+                    return getMediaFinal(alunoNotas, disciplinaID, alunoID);
+                } else if(sigla === 'Situação'){
+                    return getSituacaoFinal(alunoNotas, disciplinaID, alunoID);
+                }
+
+            }
+
+            function findAndPushDisciplina(resultArray, disciplinaName){
+
+                const found = disciplinasArray.find(item=>{
+
+                    if(item && item.nome_disciplina && item.nome_disciplina.toLowerCase().trim() === disciplinaName.toLowerCase().trim()) return item;
+
+                });
+
+                if(found) resultArray.push(found);
+                return resultArray;
+
+            }
+
+            function getDisciplinas(){
+
+                const baseNacionalComum = [
+                    'LÍNGUA PORTUGUESA',
+                    'ARTE',
+                    'EDUCAÇÃO FÍSICA',
+                    'LÍNGUA INGLESA',
+                    'MATEMÁTICA',
+                    'CIÊNCIAS',
+                    'GEOGRAFIA',
+                    'HISTÓRIA',
+                    'ENSINO RELIGIOSO'
+                ];
+
+                let result = [];
+
+                for(const disciplinaName of baseNacionalComum){
+
+                    result = findAndPushDisciplina(result, disciplinaName);
+
+                }
+
+                for(const disciplinaItem of disciplinasArray){
+
+                    const disciplinaName = disciplinaItem.nome_disciplina;
+
+                    if(disciplinaName && baseNacionalComum.indexOf(disciplinaName.toUpperCase().trim()) === -1){
+
+                        result.push(disciplinaItem);
+
+                    }
+
+                }
+
+                return result;
+
+            }
+
+            const disciplinasList = getDisciplinas();
+
+        %>
+
+        <% disciplinasList.forEach(disciplina=>{ %>
+
+            <div class="page-break">
+
+                <table class="table">
+                    <tr>
+                        <th colspan="100">
+                            <div class="header">
+
+                                <img src="<%= header.imagem_escola %>" alt="">
+
+                                <div class="info-escola text-center">
+
+                                    <h2><%= header.nome_escola %></h2>
+                                    <p><%= header.nome_rede %></p>
+                                    <p><strong>CNPJ:</strong> <%= header.cnpj_escola %> | <strong>Código INEP:</strong> <%= header.codigo_inep_escola %></p>
+                                    <p><strong>ENDEREÇO:</strong> <%= header.endereco_escola %>, <%= header.cidade_escola %> - <%= header.uf_escola %></p>
+
+                                    <% if(header.telefone_escola){ %>
+                                        <p><strong>E-MAIL:</strong> <%= header.email_escola %> <strong>TEL:</strong> <%= header.telefone_escola %></p>
+                                    <% } else { %>
+                                        <p><strong>E-MAIL:</strong> <%= header.email_escola %></p>
+                                    <% } %>
+
+                                </div>
+
+                                <img src="<%= header.imagem_rede %>" alt="">
+
+                            </div>
+                        </th>
+                    </tr>
+                    <tbody>
+                        <tr>
+                            <td class="title text-center" colspan="100">
+                                Ata de Rendimento Escolar Anual
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="100">
+
+                                <div style="display: flex;">
+                                    <span><strong>Turma:</strong> </span>
+                                    <div class="text-line"><%= turma.nome_turma %></div>
+                                    <span><strong>Componente Curricular:</strong> </span>
+                                    <div class="text-line"><%= disciplina.nome_disciplina %></div>
+                                    <span><strong>Turno:</strong> </span>
+                                    <div class="text-line"><%= turma.turno %></div>
+                                    <span><strong>Ano Letivo:</strong> </span>
+                                    <div class="text-line"><%= turma.ano_letivo %></div>
+                                </div>
+
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="text-center" colspan="10" rowspan="2">
+                                Nome do Aluno(a)
+                            </td>
+                            <% const proporcaoDeCadaGrupo = Math.floor(100 / (gruposAtividadeArray.length + 1)); %>
+                            <% gruposAtividadeArray.forEach(grupo=>{ %>
+                                <td class="text-center" colspan="<%= proporcaoDeCadaGrupo %>">
+                                    <%= grupo.sigla_grupo_avaliativo %>
+                                </td>
+                            <% }); %>
+                            <td class="text-center" colspan="10">
+                                Resultado Final
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <%
+                                const processedAtividadesColumns = [];
+                                let proporcaoDiff;
+                            %>
+
+                            <% gruposAtividadeArray.forEach(grupo=>{ %>
+
+                                <%
+                                
+                                    const atividades_do_grupo = getAtividadesFromGrupoID(grupo.id_grupo_avaliativo);
+
+                                    let numeroPadraoDeAtividades = 2;
+                                    if(grupo.permitir_recuperacao) numeroPadraoDeAtividades++;
+
+                                    const proporcaoDeCadaAtividade = Math.floor(proporcaoDeCadaGrupo / (atividades_do_grupo.length + numeroPadraoDeAtividades));
+
+                                    proporcaoDiff = proporcaoDeCadaGrupo - (proporcaoDeCadaAtividade * (atividades_do_grupo.length + numeroPadraoDeAtividades));
+
+                                %>
+
+                                <% atividades_do_grupo.forEach(atividade=>{ %>
+
+                                    <%
+                                        processedAtividadesColumns.push({
+                                            id: atividade.id_atividade_avaliativa,
+                                            sigla: atividade.sigla_atividade,
+                                            proporcao: proporcaoDeCadaAtividade,
+                                            grupoID: grupo.id_grupo_avaliativo,
+                                            grupo: grupo
+                                        });
+                                    %>
+
+                                    <td colspan="<%= proporcaoDeCadaAtividade %>">
+                                        <p class="vertical-text"><%= atividade.sigla_atividade %></p>
+                                    </td>
+
+                                <% }); %>
+
+                                <td colspan="<%= proporcaoDeCadaAtividade %>">
+                                    
+                                    <%
+                                        processedAtividadesColumns.push({
+                                            sigla: 'MP',
+                                            proporcao: proporcaoDeCadaAtividade,
+                                            grupoID: grupo.id_grupo_avaliativo,
+                                            grupo: grupo
+                                        });
+                                    %>
+
+                                    <p class="vertical-text">MP</p>
+
+                                </td>
+
+                                <% if(grupo.permitir_recuperacao){ %>
+
+                                    <%
+                                        processedAtividadesColumns.push({
+                                            sigla: 'REC',
+                                            proporcao: proporcaoDeCadaAtividade,
+                                            grupoID: grupo.id_grupo_avaliativo,
+                                            grupo: grupo
+                                        });
+                                    %>
+
+                                    <td colspan="<%= proporcaoDeCadaAtividade %>">
+                                        <p class="vertical-text">REC</p>
+                                    </td>
+
+                                <% } %>
+
+                                <td colspan="<%= (proporcaoDiff > 0) ? proporcaoDeCadaAtividade + proporcaoDiff : proporcaoDeCadaAtividade %>">
+
+                                    <%
+                                        processedAtividadesColumns.push({
+                                            sigla: 'MFP',
+                                            proporcao: proporcaoDeCadaAtividade,
+                                            grupoID: grupo.id_grupo_avaliativo,
+                                            grupo: grupo
+                                        });
+                                    %>
+
+                                    <p class="vertical-text">MFP</p>
+
+                                </td>
+
+                            <% }); %>
+
+                            <td colspan="1"><p class="vertical-text">TPA</p></td>
+                            <td colspan="1"><p class="vertical-text">MA</p></td>
+                            <% if(turma.permitir_recuperacao_anual){ %>
+                                <td colspan="1"><p class="vertical-text">RF</p></td>
+                            <% } %>
+                            <td colspan="1"><p class="vertical-text">MF</p></td>
+                            <td colspan="6"><p class="vertical-text" style="font-weight: bold; font-size: 14px; width: 100%;">Situação</p></td>
+
+                        </tr>
+
+                        <% alunos.forEach(aluno=>{ %>
+
+                            <tr class="aluno-notas-tr">
+                                <td class="text-center" colspan="10"><%= aluno.nome_aluno.toUpperCase() %></td>
+
+                                <% let nextGrupoID = null; %>
+
+                                <% processedAtividadesColumns.forEach((column, columnIndex)=>{ %>
+
+                                    <%
+
+                                        /* Cálculo da diferença de proporção entre colunas */
+                                        const atividades_do_grupo = getAtividadesFromGrupoID(column.grupoID);
+
+                                        let numeroPadraoDeAtividades = 2;
+                                        if(column.grupo.permitir_recuperacao) numeroPadraoDeAtividades++;
+
+                                        const proporcaoDeCadaAtividade = Math.floor(proporcaoDeCadaGrupo / (atividades_do_grupo.length + numeroPadraoDeAtividades));
+
+                                        proporcaoDiff = proporcaoDeCadaGrupo - (proporcaoDeCadaAtividade * (atividades_do_grupo.length + numeroPadraoDeAtividades));
+                                        /* Cálculo da diferença de proporção entre colunas */
+
+                                        const registroNota = getAlunoNotaFromColumnAtividadeID(aluno.notas, column, disciplina.id_disciplina);
+
+                                        const nextColumn = processedAtividadesColumns[columnIndex + 1];
+                                        nextGrupoID = (nextColumn !== undefined) ? nextColumn.grupoID : null;
+
+                                        const proporcaoColunaNota = getProporcaoParaColunaNota(column.proporcao, proporcaoDiff, nextGrupoID, column.grupoID);
+                                        
+                                    %>
+
+                                    <% if(column.id){ %>
+
+                                        <%
+
+                                            let notaFinalAvaliacao = '';
+
+                                            if(registroNota){
+
+                                                notaFinalAvaliacao = (registroNota.nota_final_avaliacao % 1 > 0) ? Number((registroNota.nota_final_avaliacao).toFixed(1)) : registroNota.nota_final_avaliacao;
+
+                                            }
+                                            
+                                        %>
+                                        
+                                        <td class="text-center" colspan="<%= proporcaoColunaNota %>">
+
+                                            <%
+                                                const status = getAlunoStatus(aluno.id_aluno, '');
+                                            %>
+
+                                            <% if(status === 'transferido'){ %>
+                                                T
+                                            <% } else if(status === 'desistente'){ %>
+                                                D
+                                            <% } else if(status === 'trancado'){ %>
+                                                TR
+                                            <% } else { %>
+                                                <%= notaFinalAvaliacao %>                                                
+                                            <% } %>
+
+                                        </td>
+
+                                    <% } else { %>
+
+                                        <td class="text-center" colspan="<%= proporcaoColunaNota %>">
+                                            <%= getAlunoNotaPorSigla(column.sigla, column.grupoID, aluno.notas, disciplina.id_disciplina, aluno.id_aluno) %>
+                                        </td>
+
+                                    <% } %>
+
+                                <% }); %>
+
+                                <!--
+                                    E aqui embaixo depois coloca as coisas finais...
+                                -->
+
+                                <td class="text-center" colspan="1">
+                                    <%= getAlunoNotaPorSigla('TPA', null, aluno.notas, disciplina.id_disciplina, aluno.id_aluno) %>
+                                </td>
+
+                                <td class="text-center" colspan="1">
+                                    <%= getAlunoNotaPorSigla('MA', null, aluno.notas, disciplina.id_disciplina, aluno.id_aluno) %>
+                                </td>
+
+                                <% if(turma.permitir_recuperacao_anual){ %>
+                                    <td class="text-center" colspan="1">
+                                        <%= getAlunoNotaPorSigla('RF', null, aluno.notas, disciplina.id_disciplina, aluno.id_aluno) %>
+                                    </td>
+                                <% } %>
+
+                                <td class="text-center" colspan="1">
+                                    <%= getAlunoNotaPorSigla('MF', null, aluno.notas, disciplina.id_disciplina, aluno.id_aluno) %>
+                                </td>
+                                
+                                <td class="text-center" colspan="6">
+                                    <%= getAlunoNotaPorSigla('Situação', null, aluno.notas, disciplina.id_disciplina, aluno.id_aluno) %>
+                                </td>
+                                
+                            </tr>
+
+                        <% }); %>
+
+                    </tbody>
+                </table>
+
+                <p class="legenda" style="margin-top: 2px;"><b>Legenda:</b>
+                    <% atividadeAvaliativaArray.forEach(atividade=>{ %>
+                        <b><%= atividade.sigla_atividade %></b> = <%= atividade.nome_atividade %>,
+                    <% }); %>
+
+                    <b>MP</b> Média do Período,
+                    <b>RP</b> Recuperação do Período,
+                    <b>MFP</b> Média Final do Período,
+                    <b>TPA</b> Total de Pontos Anual
+                    <b>MA</b> Média Anual,
+                    <b>RF</b> Recuperação Final,
+                    <b>MF</b> Média Final,
+                    <b>T</b> Transferido,
+                    <b>D</b> Desistente,
+                    <b>TR</b> Trancado
+
+                </p>
+
+                <div style="break-inside: avoid;">
+                    <div style="padding-top: 10px;">
+                        <div class="flex padding-top dont-break" style="gap: 10px;">
+                            <div class="flex flex-column" style="max-width: 49%;">
+                                <div class="text-line"></div>
+                                <div class="small-text"><strong>Assinatura do Secretário(a)</strong></div>
+                            </div>
+                            <div class="flex flex-column" style="max-width: 49%;">
+                                <div class="text-line"></div>
+                                <div class="small-text"><strong>Assinatura do Diretor(a)</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        <% }); %>
+
+    </body>
+</html>
+    

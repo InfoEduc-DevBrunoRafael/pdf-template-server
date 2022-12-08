@@ -70,35 +70,35 @@
     <div class="bg-color item-padding text-center">
         TEMA/CONTEÚDO
     </div>
-    <div class="item-border item-padding">
+    <div style="word-break: break-all;">
         <% if (tema_conteudo) { %>
-            <% tema_conteudo.split("\n").forEach(texto => { %>
-                <%= texto %><br>
+            <% tema_conteudo.split("\n").forEach(text => { %>
+                <%-include("../reusable/verificar_formatacao_2.ejs",{text})  %> <br> 
             <% }) %> 
         <% } %>
     </div>
     <div class="bg-color item-padding text-center">
         OBJETIVOS/HABILIDADES
     </div>
-    <div class="item-border item-padding">
+    <div style="word-break: break-all;">
         <% if (objetivos_habilidades) { %>
-            <% objetivos_habilidades.split("\n").forEach(texto => { %>
-                <%= texto %><br>
+            <% objetivos_habilidades.split("\n").forEach(text => { %>
+                <%-include("../reusable/verificar_formatacao_2.ejs",{text})  %> <br> 
             <% }) %> 
         <% } %>
     </div>
     <div class="flex flex-column">
         <div class="bg-color text-center item-border item-padding">PROCEDIMENTO DIDÁTICO/METODOLÓGICOS</div>
-        <div class="item-border item-padding">
+        <div style="word-break: break-all;">
             <% if (procedimento_didatico) { %>
-                <%= procedimento_didatico %>
+                <%-include("../reusable/verificar_formatacao_2.ejs",{text:procedimento_didatico})  %> <br> 
             <% } %>
         </div>
     </div>  
     <div class="bg-color item-padding text-center">
         RECURSOS/MATERIAIS
     </div>
-    <div class="item-border item-padding">
+    <div class="item-border item-padding small-text" style="word-break: break-all;">
         <% if (recursos_materiais) { %>
             <% recursos_materiais.split("\n").forEach(texto => { %>
                 <%= texto %><br> 
@@ -108,7 +108,7 @@
     <div class="bg-color item-padding text-center">
         AVALIAÇÃO
     </div>
-    <div class="item-border item-padding">
+    <div class="item-border item-padding small-text" style="word-break: break-all;">
         <% if (avaliacao) { %>
             <% avaliacao.split("\n").forEach(texto => { %>
                 <%= texto %><br> 
@@ -118,7 +118,7 @@
     <div class="bg-color item-padding text-center">
         REFERÊNCIAS
     </div>
-    <div class="item-border item-padding">
+    <div class="item-border item-padding small-text" style="word-break: break-all;">
         <% if (referencias) { %>
             <% referencias.split("\n").forEach(texto => { %>
                 <%= texto %><br>

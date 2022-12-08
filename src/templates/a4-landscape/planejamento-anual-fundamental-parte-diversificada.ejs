@@ -59,14 +59,18 @@
         <tbody>
             <tr>
                 <td>
-                    <% temas_conteudos.split("\n").forEach(text => { %>
-                        <%= text %><br>
-                    <% }) %>
+                    <% if(typeof temas_conteudos === 'string'){ %>
+                        <% temas_conteudos.split("\n").forEach(text => { %>
+                            <%-include("../reusable/verificar_formatacao_2.ejs",{text})  %> <br> 
+                        <% }) %>
+                    <% } %>
                 </td>
                 <td>
-                    <% objetivos_habilidades.split("\n").forEach(text => { %>
-                        <%= text %><br>
-                    <% }) %> 
+                    <% if(typeof temas_conteudos === 'string'){ %>
+                        <% objetivos_habilidades.split("\n").forEach(text => { %>
+                            <%-include("../reusable/verificar_formatacao_2.ejs",{text})  %> <br> 
+                        <% }) %> 
+                    <% } %>
                 </td>
             </tr>
         </tbody>
@@ -76,7 +80,9 @@
             <div class="flex flex-column">
                 <div class="bg-color text-center item-border item-padding">PROCEDIMENTO DIDÁTICO/METODOLÓGICOS</div>
                 <div class="item-border item-padding">
-                    <%= procedimento_didatico %>
+                    <% if(typeof procedimento_didatico === 'string'){ %>
+                        <%-include("../reusable/verificar_formatacao_2.ejs",{text:procedimento_didatico})  %> <br> 
+                    <% } %>
                 </div>
             </div>  
             <div class="flex flex-column">
@@ -96,9 +102,11 @@
                     REFERÊNCIAS
                 </div>
                 <div class="item-border item-padding">
-                    <% referencias.split("\n").forEach(texto => { %>
-                        <%= texto %><br>
-                    <% }) %>
+                    <% if(typeof temas_conteudos === 'string'){ %>
+                        <% referencias.split("\n").forEach(texto => { %>
+                            <%= texto %><br>
+                        <% }) %>
+                    <% } %>
                 </div>
             </div>
         </div>

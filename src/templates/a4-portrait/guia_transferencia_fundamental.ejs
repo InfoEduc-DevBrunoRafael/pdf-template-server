@@ -6,633 +6,384 @@
     <%- include("../css/ficha.ejs") %>
     <%- include("../css/common.ejs") %> 
     <style>
-        #titulo{
-            font-size: 20px;
-            text-align: center;
-            margin-bottom: 6px;
-        }
-        .base_comum{
-            max-width: 20px;
-            height: 150px;
-            transform: rotate(270deg);
-            position: relative;
-            white-space: nowrap;
-        }
         .text{
             position: relative;
             left: -70px;
         }
         .text2{
             position: relative;
-            left: -60px;
+            left: -40px;
+            max-height:50px;
         }
-        .text3{
-            position: relative;
-            left: -30px;
-        }
-        .text4{
-            position: relative;
-            left: -280px;
-            font-size: 14px;
-        }
-        .parte_diversificada{
-            height: 170px;
+        .text-vertical{
+            max-width: 30px;
             transform: rotate(270deg);
             position: relative;
             white-space: nowrap;
-        }
-        .tex-vertical{
-            max-width: 20px;
-            height: 150px;
-            transform: rotate(270deg);
-            position: relative;
-            white-space: nowrap;
-        }
-        .tex-vertical2{
-            max-width: 20px;
-            height: 300px;
-            transform: rotate(270deg);
-            position: relative;
-            white-space: nowrap;
-        }
-        .center{
-            text-align: center;
-
-        }
-        .celulaTitle{
-            text-align: left;
-            font-weight: bold;
-            font-size: 14px;
-            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
-    <div id="container">
+    <% 
+    function remover_acentos_espaco(str) {
+        return str.normalize("NFD").replace(/[^a-zA-Zs]/g, "");
+    }
+     %> 
+    <div>
         <%- include("../reusable/header.ejs") %>
-        <div class="flex" style="margin-top: 40px;">
-            <div style="flex: 1; margin-left: 10px;">
-                    <%- include("../reusable/cabecalho-dados-escola.ejs") %>
-                <div class="block" style="margin-top: -10px; border-radius: 0px 0px 8px 8px;">
-                    <p>Concedemos a presente Guia de Transferência ao aluno (a) <b><%= nome_aluno %> <%= sobrenome_aluno %></b>  filho (a) de <b><%= nome_pai %> <%= sobrenome_pai %></b> e de <b><%= nome_mae %> <%= sobrenome_mae %></b>, nascido (a) em <b><%= data_nascimento_aluno %></b>, na cidade de <b><%= cidade_aluno %></b>, estado de <b><%= estado_aluno %></b>, nacionalidade <b><%= nacionalidade_aluno %></b>.</p>
-                    <p>Matriculado (a) em <b><%= data_matricula %></b>, no <b><%= serie_aluno %></b>, deste Estabelecimento de Ensino conforme rendimento obtido abaixo e/ou no verso desta guia.</p>
+        <h2 class="page-title">RENDIMENTO ESCOLAR</h2>
+        <div class="flex flex-column small-gap">
+            <div class="multicolumn">
+                <b class="pad-right">Aluno (a):</b>
+                <div class="text-line"><%= aluno_nome %> <%= aluno_sobrenome %></div>
+            </div>
+            <div class="flex" style="gap: 10px;">
+
+                <div class="multicolumn" style="max-width: 220px;">
+                    <b class="pad-right">Turma:</b>
+                    <div class="text-line"><%= nome_turma %></div>
+                </div>  
+                <div class="multicolumn">
+                    <b class="pad-right">ID da Turma:</b>
+                    <div class="text-line"><%= id_turma %></div>
+                </div>
+                <div class="multicolumn" style="max-width: 140px;">
+                    <b class="pad-right">Turno:</b>
+                    <div class="text-line"><%= nome_turno %></div>
+                </div>
+                <div class="multicolumn" style="max-width: 130px;">
+                    <b class="pad-right">Ano Letivo:</b>
+                    <div class="text-line"><%= nome_ano_letivo %> </div>
                 </div>
             </div>
         </div>
-        <div style="margin-top: 20px;">
-            <div id="titulo" ><b>RENDIMENTO ESCOLAR</b></div>
-            <div style="display: flex;">
-                <table class="table" style="width: 100%; border-spacing: 0;" >
-                    <tr>
-                        <td colspan="2" class="celulaTitle">ANO LETIVO: <%= ano_letivo %></td>
-                        <th colspan="13">BASE NACIONAL COMUM</th>
-                    </tr>
-                    <tr>
-                        <td colspan="2" class="celulaTitle">PARTE DO CURRÍCULO</td>
-                        <th colspan="9">ÁREAS DE CONHECIMENTO</th>
-                        <td colspan="3" rowspan="2">PARTE DIVERSIFICADA</td>
-                    </tr>
-                    <tr>
-                        <td rowspan="2"  class="tex-vertical">UNIDADE</td>
-                        <td rowspan="2"><span style="position: relative; top: -70px;  left: 130px;">COMPONENTES CURRICULARES</span><span style="position: relative; top: 70px; left: -130px; ">RENDIMENTO <span style="position: relative; left: 140px;">ESCOLAR</span></span></td>
-                        <td colspan="4" class="celulaTitle center"> Linguagem</td>
-                        <td class="celulaTitle center"> MATEMÁTICA</td>
-                        <td class="celulaTitle center"> CIÊCIAS DA NATUREZA</td>
-                        <td colspan="2" class="celulaTitle center"> CIÊCIAS HUMANAS</td>
-                        <td class="celulaTitle center"> ENSINO RELIGIOSO</td>
-                    </tr>
-                    <tr>
-                        <th class="tex-vertical"><span class="text">LÍNGUA <br> PORTUGUESA</span></th>
-                        <th class="tex-vertical"><span class="text">ARTE</span></th>
-                        <th class="tex-vertical"><span class="text">EDUCAÇÃO <br> FÍSICA</span></th>
-                        <th class="tex-vertical"><span class="text">LÍNGUA INGLESA</span></th>
-                        <th class="tex-vertical"><span >MATEMÁTICA</span></th>
-                        <th class="tex-vertical"><span>CIÊCIAS</span></th>
-                        <th class="tex-vertical"><span class="text2">HISTÓRIA</span></th>
-                        <th class="tex-vertical"><span class="text2">GEOGRAFICA</span></th>
-                        <th class="tex-vertical"><span class="text3">ENSINO <br> RELIGIOSO</span></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <td rowspan="3">1º</td>
-                        <th>MÉDIA</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>RECUPERAÇÃO PARALELA</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>NOTA FINAL</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td rowspan="3">2º</td>
-                        <th>MÉDIA</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>RECUPERAÇÃO PARALELA</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>NOTA FINAL</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <% if (numero_preriodos == 3) { %>
-                        <tr>
-                            <td rowspan="3">3º</td>
-                            <th>MÉDIA</th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>RECUPERAÇÃO PARALELA</th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>NOTA FINAL</th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    <% } %>
-                    <% if (numero_preriodos == 4) { %>
-                        <tr>
-                            <td rowspan="3">3º</td>
-                            <th>MÉDIA</th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>RECUPERAÇÃO PARALELA</th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>NOTA FINAL</th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td rowspan="3">4º</td>
-                            <th>MÉDIA</th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>RECUPERAÇÃO PARALELA</th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <th>NOTA FINAL</th>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    <% } %>
-                    <tr>
-                        <th colspan="2">MÉDIA ANUAL</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">NOTA DE RECUPERAÇÃO FINAL</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">MÉDIA FINAL</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">TOTAL DE DIAS LETIVOS: ( <%= dias_letivos %>  )</th>
-                        <th colspan="6">TOTAL DE FALTAS: ( <%= total_faltas %>  )</th>
-                        <th colspan="6">FREQUÊNCIA %: ( <%= frequencia %>  )</th>
-                    </tr>
-                    <tr>
-                        <th colspan="14">RESULTADO FINAL: ( <%= resultado_final == "aprovado" ? "X" : "" %> ) APROVADO     ( <%= resultado_final == "reprovado" ? "X" : "" %>  ) REPROVADO </th>
 
-                    </tr>
-                </table>
-            </div>
+        <div style="margin-top: 15px;">
+            <table class="table">
+                <tr>
+                    <td></td>
+                    <th colspan="10">BASE NACIONAL COMUM</th>
+                    <th colspan="3">PARTE DIVERSIFICADA</th>
+                </tr>
+                <tr>
+                    <th class="text-vertical" style="height: 105px;"><span style="left: -30px;" class="text">UNIDADE</span></th>
+                    <td><span style="">COMPONENTES CURRICULARES</span><br><span style="">RENDIMENTO ESCOLAR</span></td>
+                    <!-- materias -->
+                    <th class="text-vertical"><span class="text2">LÍNGUA <br> PORTUGUESA</span></th>
+                    <th class="text-vertical"><span class="text2">ARTE</span></th>
+                    <th class="text-vertical"><span class="text2">EDUCAÇÃO <br> FÍSICA</span></th>
+                    <th class="text-vertical"><span class="text2">LÍNGUA <br> INGLESA</span></th>
+                    <th class="text-vertical"><span class="text2">MATEMÁTICA</span></th>
+                    <th class="text-vertical"><span class="text2">CIÊCIAS</span></th>
+                    <th class="text-vertical"><span class="text2">HISTÓRIA</span></th>
+                    <th class="text-vertical"><span class="text2">GEOGRAFICA</span></th>
+                    <th class="text-vertical"><span class="text2">ENSINO <br> RELIGIOSO</span></th>
+
+                    <% parte_diversificada.forEach(element => { %>
+                        <th class="text-vertical"><span style="left: -30px;" class="text2"><%= element %> </span></th>
+
+                    <% }) %>
+                </tr>
+                <!-- unidades -->
+
+                <% var dici = ["linguaportuguesa","arte","educacaofisica","linguainglesa","matematica","ciencias","historia","geografia","ensinoreligioso" ] %> 
+                <% 
+                for (let index = 0; index < parte_diversificada.length; index++) {
+                    const element = parte_diversificada[index];
+                    dici.push(element)
+                    
+                }
+                
+
+                %> 
+                <% var unidade = ["1 unidade", "2 unidade","3 unidade", "4 unidade"] %> 
+                <!-- unidade 1 -->
+                <tr>
+                    <th rowspan="4" class="text-vertical" style="max-height: 50px;"><span style="left: -30px;" class="text">1º UNI</span></th>
+                    <th>AV1</th>
+                    <% avaliacao1.forEach((element,index) => { %>.
+                     <% if ((element.unidade_av1).toLowerCase() == unidade[0]) { %>
+                      <% if (remover_acentos_espaco(element.diciplina_av1).toLowerCase() == dici[index]) { %>
+                        <% if (element.nota_av1 == null) { %>
+                         <th>*</th>
+                        <% }else{%>
+                            <td style="text-align: center;"><%= element.nota_av1 %> </td>
+                        <%} %>
+                      <% } %>
+                     <% } %>
+                    <% }) %>
+                </tr>
+                <tr>
+                    <th>AV2</th>
+                    <% avaliacao2.forEach((element,index) => { %>
+                        <% if ((element.unidade_av2).toLowerCase() == unidade[0]) { %>
+                            <% if (remover_acentos_espaco(element.diciplina_av2).toLowerCase() == dici[index]) { %>
+                              <% if (element.nota_av2 == null) { %>
+                               <th>*</th>
+                              <% }else{%>
+                                  <td style="text-align: center;"><%= element.nota_av2 %> </td>
+                              <%} %>
+                            <% } %>
+                           <% } %>
+                    <% }) %>
+                </tr>
+                <tr>
+                    <th>Recuperação</th>
+                    <% recuperacao.forEach((element,index) => { %>
+                        <% if ((element.unidade_rec).toLowerCase() == unidade[0]) { %>
+                            <% if (remover_acentos_espaco(element.diciplina_rec).toLowerCase() == dici[index]) { %>
+                              <% if (element.nota_rec == null) { %>
+                               <th>*</th>
+                              <% }else{%>
+                                  <td style="text-align: center;"><%= element.nota_rec %> </td>
+                              <%} %>
+                            <% } %>
+                           <% } %>
+                    <% }) %>
+                </tr>
+                <tr>
+                    <th>Média Final do Período</th>
+                    <% media_final_periodo.forEach((element,index) => { %>
+                        <% if ((element.unidade_media).toLowerCase() == unidade[0]) { %>
+                            <% if (remover_acentos_espaco(element.diciplina_media).toLowerCase() == dici[index]) { %>
+                              <% if (element.nota_rec == null) { %>
+                               <th>*</th>
+                              <% }else{%>
+                                  <td style="text-align: center;"><%= element.nota_media %> </td>
+                              <%} %>
+                            <% } %>
+                           <% } %>
+                    <% }) %>
+                </tr>
+
+                <!-- unidade 2 -->
+
+                <tr>
+                    <th rowspan="4" class="text-vertical" style="max-height: 50px;"><span style="left: -30px;" class="text">2º UNI</span></th>
+                    <th>AV1</th>
+                    <% avaliacao1.forEach((element,index) => { %>.
+                     <% if ((element.unidade_av1).toLowerCase() == unidade[1]) { %>
+                      <% if (remover_acentos_espaco(element.diciplina_av1).toLowerCase() == dici[index]) { %>
+                        <% if (element.nota_av1 == null) { %>
+                         <th>*</th>
+                        <% }else{%>
+                            <td style="text-align: center;"><%= element.nota_av1 %> </td>
+                        <%} %>
+                      <% } %>
+                     <% } %>
+                    <% }) %>
+                </tr>
+                <tr>
+                    <th>AV2</th>
+                    <% avaliacao2.forEach((element,index) => { %>
+                        <% if ((element.unidade_av2).toLowerCase() == unidade[0]) { %>
+                            <% if (remover_acentos_espaco(element.diciplina_av2).toLowerCase() == dici[index]) { %>
+                              <% if (element.nota_av2 == null) { %>
+                               <th>*</th>
+                              <% }else{%>
+                                  <td style="text-align: center;"><%= element.nota_av2 %> </td>
+                              <%} %>
+                            <% } %>
+                           <% } %>
+                    <% }) %>
+                </tr>
+                <tr>
+                    <th>Recuperação</th>
+                    <% recuperacao.forEach((element,index) => { %>
+                        <% if ((element.unidade_rec).toLowerCase() == unidade[0]) { %>
+                            <% if (remover_acentos_espaco(element.diciplina_rec).toLowerCase() == dici[index]) { %>
+                              <% if (element.nota_rec == null) { %>
+                               <th>*</th>
+                              <% }else{%>
+                                  <td style="text-align: center;"><%= element.nota_rec %> </td>
+                              <%} %>
+                            <% } %>
+                           <% } %>
+                    <% }) %>
+                </tr>
+                <tr>
+                    <th>Média Final do Período</th>
+                    <% media_final_periodo.forEach((element,index) => { %>
+                        <% if ((element.unidade_media).toLowerCase() == unidade[0]) { %>
+                            <% if (remover_acentos_espaco(element.diciplina_media).toLowerCase() == dici[index]) { %>
+                              <% if (element.nota_rec == null) { %>
+                               <th>*</th>
+                              <% }else{%>
+                                  <td style="text-align: center;"><%= element.nota_media %> </td>
+                              <%} %>
+                            <% } %>
+                           <% } %>
+                    <% }) %>
+                </tr>
+
+                <!-- unidade 3 -->
+
+                <tr>
+                    <th rowspan="4" class="text-vertical" style="max-height: 50px;"><span style="left: -30px;" class="text">3º UNI</span></th>
+                    <th>AV1</th>
+                    <% avaliacao1.forEach((element,index) => { %>.
+                     <% if ((element.unidade_av1).toLowerCase() == unidade[2]) { %>
+                      <% if (remover_acentos_espaco(element.diciplina_av1).toLowerCase() == dici[index]) { %>
+                        <% if (element.nota_av1 == null) { %>
+                         <th>*</th>
+                        <% }else{%>
+                            <td style="text-align: center;"><%= element.nota_av1 %> </td>
+                        <%} %>
+                      <% } %>
+                     <% } %>
+                    <% }) %>
+                </tr>
+                <tr>
+                    <th>AV2</th>
+                    <% avaliacao2.forEach((element,index) => { %>
+                        <% if ((element.unidade_av2).toLowerCase() == unidade[0]) { %>
+                            <% if (remover_acentos_espaco(element.diciplina_av2).toLowerCase() == dici[index]) { %>
+                              <% if (element.nota_av2 == null) { %>
+                               <th>*</th>
+                              <% }else{%>
+                                  <td style="text-align: center;"><%= element.nota_av2 %> </td>
+                              <%} %>
+                            <% } %>
+                           <% } %>
+                    <% }) %>
+                </tr>
+                <tr>
+                    <th>Recuperação</th>
+                    <% recuperacao.forEach((element,index) => { %>
+                        <% if ((element.unidade_rec).toLowerCase() == unidade[0]) { %>
+                            <% if (remover_acentos_espaco(element.diciplina_rec).toLowerCase() == dici[index]) { %>
+                              <% if (element.nota_rec == null) { %>
+                               <th>*</th>
+                              <% }else{%>
+                                  <td style="text-align: center;"><%= element.nota_rec %> </td>
+                              <%} %>
+                            <% } %>
+                           <% } %>
+                    <% }) %>
+                </tr>
+                <tr>
+                    <th>Média Final do Período</th>
+                    <% media_final_periodo.forEach((element,index) => { %>
+                        <% if ((element.unidade_media).toLowerCase() == unidade[0]) { %>
+                            <% if (remover_acentos_espaco(element.diciplina_media).toLowerCase() == dici[index]) { %>
+                              <% if (element.nota_rec == null) { %>
+                               <th>*</th>
+                              <% }else{%>
+                                  <td style="text-align: center;"><%= element.nota_media %> </td>
+                              <%} %>
+                            <% } %>
+                           <% } %>
+                    <% }) %>
+                </tr>
+
+                <!-- unidade 4 -->
+
+                <tr>
+                    <th rowspan="4" class="text-vertical" style="max-height: 50px;"><span style="left: -30px;" class="text">4º UNI</span></th>
+                    <th>AV1</th>
+                    <% avaliacao1.forEach((element,index) => { %>.
+                     <% if ((element.unidade_av1).toLowerCase() == unidade[3]) { %>
+                      <% if (remover_acentos_espaco(element.diciplina_av1).toLowerCase() == dici[index]) { %>
+                        <% if (element.nota_av1 == null) { %>
+                         <th>*</th>
+                        <% }else{%>
+                            <td style="text-align: center;"><%= element.nota_av1 %> </td>
+                        <%} %>
+                      <% } %>
+                     <% } %>
+                    <% }) %>
+                </tr>
+                <tr>
+                    <th>AV2</th>
+                    <% avaliacao2.forEach((element,index) => { %>
+                        <% if ((element.unidade_av2).toLowerCase() == unidade[0]) { %>
+                            <% if (remover_acentos_espaco(element.diciplina_av2).toLowerCase() == dici[index]) { %>
+                              <% if (element.nota_av2 == null) { %>
+                               <th>*</th>
+                              <% }else{%>
+                                  <td style="text-align: center;"><%= element.nota_av2 %> </td>
+                              <%} %>
+                            <% } %>
+                           <% } %>
+                    <% }) %>
+                </tr>
+                <tr>
+                    <th>Recuperação</th>
+                    <% recuperacao.forEach((element,index) => { %>
+                        <% if ((element.unidade_rec).toLowerCase() == unidade[0]) { %>
+                            <% if (remover_acentos_espaco(element.diciplina_rec).toLowerCase() == dici[index]) { %>
+                              <% if (element.nota_rec == null) { %>
+                               <th>*</th>
+                              <% }else{%>
+                                  <td style="text-align: center;"><%= element.nota_rec %> </td>
+                              <%} %>
+                            <% } %>
+                           <% } %>
+                    <% }) %>
+                </tr>
+                <tr>
+                    <th>Média Final do Período</th>
+                    <% media_final_periodo.forEach((element,index) => { %>
+                        <% if ((element.unidade_media).toLowerCase() == unidade[0]) { %>
+                            <% if (remover_acentos_espaco(element.diciplina_media).toLowerCase() == dici[index]) { %>
+                              <% if (element.nota_rec == null) { %>
+                               <th>*</th>
+                              <% }else{%>
+                                  <td style="text-align: center;"><%= element.nota_media %> </td>
+                              <%} %>
+                            <% } %>
+                           <% } %>
+                    <% }) %>
+                </tr>
+
+                
+                <!-- outros -->
+                <tr>
+                    <th colspan="2" style="height: 10px;">MÉDIA ANUAL</th>
+                    <% media_anual.forEach((element,index) => { %>
+                        <% if (remover_acentos_espaco(element.materia_media_anual).toLowerCase() == dici[index]) { %>
+                            <% if (element.media_anual == null) { %>
+                             <th>*</th>
+                            <% }else{%>
+                                <td style="text-align: center;"><%= element.media_anual %> </td>
+                            <%} %>
+                          <% } %>
+                    <% }) %>
+                </tr>
+                <tr>
+                    <th colspan="2" style="height: 10px; font-size: 14px;">NOTA DA RECUPERAÇÃO FINAL</th>
+                    <% recuperacao_final.forEach((element,index) => { %>
+                        <% if (remover_acentos_espaco(element.materia_rec_final).toLowerCase() == dici[index]) { %>
+                            <% if (element.rec_final == null) { %>
+                             <th>*</th>
+                            <% }else{%>
+                                <td style="text-align: center;"><%= element.rec_final %> </td>
+                            <%} %>
+                          <% } %>
+                    <% }) %>
+                </tr>
+                <tr>
+                    <th colspan="2" style="height: 10px;">MÉDIA FINAL ANUAL</th>
+                    <% media_final.forEach((element,index) => { %>
+                        <% if (remover_acentos_espaco(element.materia_media_final).toLowerCase() == dici[index]) { %>
+                            <% if (element.media_final == null) { %>
+                             <th>*</th>
+                            <% }else{%>
+                                <td style="text-align: center;"><%= element.media_final %> </td>
+                            <%} %>
+                          <% } %>
+                    <% }) %>
+                </tr>
+                <tr >
+                    <td colspan="3" style="height: 10px; font-size: 12px;"><b>TOTAL DE DIAS LETIVOS:</b> ( <%= dias_letivos %>  )</td>
+                    <td colspan="6" style="font-size: 12px;"><b>TOTAL DE FALTAS:</b> ( <%= faltas %>  )</td>
+                    <td colspan="5" style="font-size: 12px;"><b>FREQUÊNCIA %:</b> ( <%= frequencia %>%  )</td>
+                </tr>
+                <tr>
+                    <td colspan="14" style="height: 10px; font-size: 12px;"><b>RESULTADO FINAL:</b> ( <%= resultado_final == "Aprovado" ? "X" : "" %> ) Aprovado    ( <%= resultado_final == "Reprovado" ? "X" : "" %> ) Reprovado</td>
+                </tr>
+            </table>
         </div>
-        <div style="margin-top: 80px;">
-            <div id="titulo" ><u><b>HISTÓRICO ESCOLAR</b></u></div>
-            <div style="display: flex;">
-                <table class="table" style="width: 100%; border-spacing: 0;" >
-                    <tr>
-                        <th colspan="2" rowspan="2">COMPONENTES CURRICULARES</th>
-                        <th colspan="3" style="background-color: rgb(202, 202, 202);">1ª SÉRIE</th>
-                        <th  colspan="3" style="background-color: rgb(202, 202, 202);">2ª SÉRIE</th>
-                        <th  colspan="3" style="background-color: rgb(202, 202, 202);">3ª SÉRIE</th>
-                        <th  colspan="3" style="background-color: rgb(202, 202, 202);">4ª SÉRIE</th>
-                        <th  colspan="3" style="background-color: rgb(202, 202, 202);">5ª SÉRIE</th>
-                        <th rowspan="2" class="tex-vertical"><span class="text" style="font-size: 14px;">CARGA HORÁRIA TOTAL</span></th>
-                    </tr>
-                    <tr>
-                        <th class="tex-vertical"><span class="text2">Ano</span></th>
-                        <th class="tex-vertical"><span class="text2">Nota</span></th>
-                        <th class="tex-vertical"><span class="text2">CARGA HORÁRIA</span></th>
-                        <th class="tex-vertical"><span class="text2">Ano</span></th>
-                        <th class="tex-vertical"><span class="text2">Nota</span></th>
-                        <th class="tex-vertical"><span class="text2">CARGA HORÁRIA</span></th>
-                        <th class="tex-vertical"><span class="text2">Ano</span></th>
-                        <th class="tex-vertical"><span class="text2">Nota</span></th>
-                        <th class="tex-vertical"><span class="text2">CARGA HORÁRIA</span></th>
-                        <th class="tex-vertical"><span class="text2">Ano</span></th>
-                        <th class="tex-vertical"><span class="text2">Nota</span></th>
-                        <th class="tex-vertical"><span class="text2">CARGA HORÁRIA</span></th>
-                        <th class="tex-vertical"><span class="text2">Ano</span></th>
-                        <th class="tex-vertical"><span class="text2">Nota</span></th>
-                        <th class="tex-vertical"><span class="text2">CARGA HORÁRIA</span></th>
-                    </tr>
-                    <tr>
-                        <th rowspan="8" class="tex-vertical2"><span class="text">BASE NACIONAL COMUM</span></th>
-                        <th>LÍNGUA PORTUGUESA</th>
-                        <td rowspan="13" class="tex-vertical2"><span class="text4">Instituição de Ensino: <b><%= instituicao %></b> Local: <b><%= cidade %></b> UF: <b><%= uf %></b></span></td>
-                        <td></td>
-                        <td></td>
-                        <td rowspan="13" class="tex-vertical2"><span class="text4"><span style="text-align: left;">Instituição de Ensino: <b><%= instituicao %></b></span>  <span style="text-align: center;">Local: <b><%= cidade %></b> </span> <span style="text-align: right;">UF: <b><%= uf %></b></span></span></td>
-                        <td></td>
-                        <td></td>
-                        <td rowspan="13" class="tex-vertical2"><span class="text4">Instituição de Ensino: <b><%= instituicao %></b> Local: <b><%= cidade %></b> UF: <b><%= uf %></b></span></td>
-                        <td></td>
-                        <td></td>
-                        <td rowspan="13" class="tex-vertical2"><span class="text4">Instituição de Ensino: <b><%= instituicao %></b> Local: <b><%= cidade %></b> UF: <b><%= uf %></b></span></td>
-                        <td></td>
-                        <td></td>
-                        <td rowspan="13" class="tex-vertical2"><span class="text4">Instituição de Ensino: <b><%= instituicao %></b> Local: <b><%= cidade %></b> UF: <b><%= uf %></b></span></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>MATEMÁTICA</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>CIÊNCIAS</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>GEOGRAFIA</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>HISTÓRIA</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>ARTES</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>EDUCAÇÃO FISICA</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>RELIGIÃO</th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th rowspan="4" class="tex-vertical2"><span class="text">PARTE DIVERSIFICADA</span></th>
-                        <th></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th></th>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">TOTAL GERAL</th>
-                        <td colspan="2"></td>
-                        <td colspan="2"></td>
-                        <td colspan="2"></td>
-                        <td colspan="2"></td>
-                        <td colspan="2"></td>
-                        <td colspan="2"></td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">FREQUENCIA %</th>
-                        <td colspan="3"></td>
-                        <td colspan="3"></td>
-                        <td colspan="3"></td>
-                        <td colspan="3"></td>
-                        <td colspan="3"></td>
-                        <td colspan="3"></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <%- include("../reusable/campo-assinatura-direcao.ejs") %> 
-    </div>  
+    </div>
 </body>
 </html>

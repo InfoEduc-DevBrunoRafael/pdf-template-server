@@ -20,19 +20,27 @@
     <thead style="display: table-row-group;">
         <tr>
             <td class="text-center">Data</td>
+            <td class="text-center">Nº de Aulas</td>
             <td class="text-center">Resumo das Atividades</td>
             <td class="text-center" style="width: 20%;">Rubrica do(a) Professor(a)</td>
         </tr>
     </thead>
     <tbody>
+        <% let totalAulas = 0; %>
         <% registros_aulas.forEach(atividade => { %>
             <tr>
                 <td class="text-center" style="width: 10%">
                     <% const date = new Date(atividade.data) %>
                     <%= padWithZero(date.getDate()) + "/" + padWithZero(date.getMonth() + 1) %>
                 </td>
+                <td class="text-center" style="width: 10%;">
+                    <%= atividade.qtd_aulas %>
+                    <% totalAulas += (atividade.qtd_aulas) ? parseInt(atividade.qtd_aulas) : 0 %>
+                </td>
                 <td>
-                    <%= atividade.resumo %>
+                    <% if(typeof atividade.resumo === 'string'){ %>
+                        <%-include("../verificar_formatacao_2.ejs",{ text: atividade.resumo })  %>
+                    <% } %>
                 </td>
                 <td class="text-center" style="width: 20%;">
                     
@@ -40,6 +48,10 @@
             </tr> 
         <% }) %>
     </tbody>
+    <tr>
+        <td class="text-center" style="border: none;"><strong>Total: </strong></td>
+        <td class="text-center" style="border-left: 1px solid;"><%= totalAulas %></td>
+    </tr>
 </table>
 <style>
     .flex {
@@ -60,13 +72,13 @@
 <div style="break-inside: avoid;">
     <div style="padding-top: 10px;">
         <div class="flex padding-top dont-break" style="gap: 10px;">
-            <div class="flex flex-column">
+            <div class="flex flex-column" style="max-width: 49%;">
                 <div class="text-line"></div>
-                <div class="small-text">Assinatura da Coordenação Pedagógica</div>
+                <div class="small-text"><strong>Assinatura da Coordenação Pedagógica</strong></div>
             </div>
-            <div class="flex flex-column">
+            <div class="flex flex-column" style="max-width: 49%;">
                 <div class="text-line"></div>
-                <div class="small-text">Assinatura do Diretor(a)</div>
+                <div class="small-text"><strong>Assinatura do Diretor(a)</strong></div>
             </div>
         </div>
     </div>

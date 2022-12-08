@@ -22,7 +22,7 @@
 <body>
     <div id="container">
         <%- include("../reusable/header.ejs") %>
-        <h4 class="bold-center">Ficha Individual do Aluno</h4>
+        <h4 class="bold-center"><%= tipo_documento == "cadastro" ? "Ficha de Cadastro do Aluno" : "Ficha de Matricula do Aluno" %> </h4>
         <div class="block">
         <div class="lineheightsmall">
                 <div class="title-header">Dados da Escola</div>
@@ -99,36 +99,35 @@
                                     /
                                     <div class="texto-linha text-center"><%= number(dataNascimento.getFullYear()) %></div>
                                 </div>
-                                <div class="inline">
+                                <div class="inline" >
                                     <b>Nacionalidade:</b>
                                     <div class="texto-linha"><%= string(aluno.nacionalidade) %></div>
                                 </div>
                             </div>
-                            <div class="multicoluna inline">
+                            <div class="multicoluna inline" style="font-size: 12px;">
                                 <div class="inline">
                                     <b>RG:</b>
-                                    <div class="texto-linha" style="width: 100px;"><%= string(aluno.rg) %></div>
+                                    <div class="texto-linha" style="width: 60px; "><%= string(aluno.rg) %></div>
                                 </div>
-                                <div class="inline">
+                                <div class="inline" style="width: 20px; font-size: 12px;">
                                     <b>SSP/RG:</b>
                                     <div class="texto-linha text-center"><%= string(aluno.ssp_rg) %> </div>
                                 </div>
-                                <div class="inline">
+                                <div class="inline" style="font-size: 12px;">
                                     <b>CPF:</b>
-                                    <div class="texto-linha"><%= string(aluno.cpf) %> </div>
+                                    <div class="texto-linha" ><%= string(aluno.cpf) %> </div>
                                 </div>
-                            </div>
-                            <div class="multicoluna inline">
-                                <div class="inline">
-                                    <b>Gênero:</b>
+                                <div class="inline" style="width: 50px; font-size: 12px;">
+                                    <b">Gênero:</b>
                                     (<%= aluno.genero === "Masculino" ? "X" : "  " %>) M
                                     (<%= aluno.genero === "Feminino" ? "X" : " "%>) F
                                 </div>
-                                <div class="inline">
-                                    <b>Etnia/Cor:</b>
+                                <div class="inline"style=" font-size: 12px; width: 100px;">
+                                    <b >Etnia/Cor:</b>
                                     <div class="texto-linha"><%= string(aluno.etnia_cor) %> </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                     <div>
@@ -163,8 +162,8 @@
                     <div class="block">
                         <div class="multicoluna">
                             <div class="inline">
-                                <b>N° da matricula (reg. civil):</b>
-                                <div class="texto-linha"><%= string(aluno.certidao_nova.numero_matricula) %></div>
+                                <b>Nº da Certidão de Nascimento:</b>
+                                <div class="texto-linha"><%= string(aluno.certidao_nova.numero_certidao) %></div>
                             </div>
                         </div>
                     </div>
@@ -304,66 +303,82 @@
                         </div>
                     </div>
                 </div>
-                <div class="title-header">Requerimento</div>
-                <div class="block">
-                    <div class="flex streched-text">
-                        <div class="multicoluna">
-                            <div class="inline">
-                                <b>Situação da matrícula:</b>
-                                (<%= aluno.matricula.situacao === "Nova" ? "X" : " " %>) Nova
-                                (<%= aluno.matricula.situacao === "Renovada" ? "X" : " " %>) Renovada
-                                (<%= aluno.matricula.situacao === "Transferido" || aluno.matricula.situacao === "Desistente" || aluno.matricula.situacao === "Trancado" ? "X" : " " %>) Encerrada
+                <% if (tipo_documento == "matricula") { %>
+                    <div class="title-header">Requerimento</div>
+                    <div class="block">
+                        <div class="flex streched-text">
+                            <div class="multicoluna">
+                                <div class="inline">
+                                    <b>Nº de Matricula:</b>
+                                    <div class="texto-linha" style="margin-bottom: 5px;"><%= string(aluno.matricula.numero_matricola) %> </div>
+                                </div>
+                            </div>
+                            <div class="multicoluna inline">
+                                <b>Observações:</b>
+                                <div class="texto-linha" style="margin-bottom: 5px;"><%= aluno.matricula.observacoes %> </div>
                             </div>
                         </div>
-                        <div class="multicoluna inline">
-                            <b>Motivo:</b>
-                            <div class="texto-linha" style="margin-bottom: 5px;"></div>
+                        <div class="block">
+                            <div class="flex streched-text">
+                                <div class="multicoluna">
+                                    <div class="inline">
+                                        <b>Situação da matrícula:</b>
+                                        (<%= aluno.matricula.situacao === "Nova" ? "X" : " " %>) Nova
+                                        (<%= aluno.matricula.situacao === "Renovada" ? "X" : " " %>) Renovada
+                                        (<%= aluno.matricula.situacao === "Transferido" || aluno.matricula.situacao === "Desistente" || aluno.matricula.situacao === "Trancado" ? "X" : " " %>) Encerrada
+                                    </div>
+                                </div>
+                                <div class="multicoluna inline">
+                                    <b>Motivo:</b>
+                                    <div class="texto-linha" style="margin-bottom: 5px;"></div>
+                                </div>
+                            </div>
+                            <table id="matricula" style="width: 100%; border-spacing: 0; border-collapse: collapse;">
+                                <thead style="font-size: 13px;">
+                                    <tr>
+                                        <td>Data da Matrícula</td>
+                                        <td>Assinatura do Responsável</td>
+                                        <td>Parecer do responsável pela escola</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="flex">
+                                                <% const matriculaData = new Date(aluno.matricula.data) %>
+                                                <div class="texto-linha text-center">
+                                                    <%= number(matriculaData.getDate().toString().padStart(2, "0")) %></div>
+                                                /
+                                                <div class="texto-linha text-center">
+                                                    <%= number((matriculaData.getMonth() + 1).toString().padStart(2, "0")) %></div>
+                                                /
+                                                <div class="texto-linha text-center"><%= number(matriculaData.getFullYear()) %>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="flex" style="padding: 20px 2px 1px 2px;">
+                                                <div class="texto-linha"></div>
+                                            </div>
+                                        </td>
+                                        <td style="font-size: 12px; padding-left: 4px;">
+                                            (<%= aluno.matricula.status_parecer === "Deferido" ? "X" : " " %>) Deferido
+                                            <br>
+                                            <div class="flex">
+                                                (<%= aluno.matricula.status_parecer === "Indeferido" ? "X" : " " %>) Indeferido
+                                                <div class="flex" style="padding-left: 2px; width: 70%; flex-direction: column;">
+                                                    <div class="texto-linha"></div>
+                                                    <div style="text-align: center; font-size: 6px;">Assinatura do Diretor(a)</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <table id="matricula" style="width: 100%; border-spacing: 0; border-collapse: collapse;">
-                        <thead style="font-size: 13px;">
-                            <tr>
-                                <td>Data da Matrícula</td>
-                                <td>Assinatura do Responsável</td>
-                                <td>Parecer do responsável pela escola</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="flex">
-                                        <% const matriculaData = new Date(aluno.matricula.data) %>
-                                        <div class="texto-linha text-center">
-                                            <%= number(matriculaData.getDate().toString().padStart(2, "0")) %></div>
-                                        /
-                                        <div class="texto-linha text-center">
-                                            <%= number((matriculaData.getMonth() + 1).toString().padStart(2, "0")) %></div>
-                                        /
-                                        <div class="texto-linha text-center"><%= number(matriculaData.getFullYear()) %>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="flex" style="padding: 20px 2px 1px 2px;">
-                                        <div class="texto-linha"></div>
-                                    </div>
-                                </td>
-                                <td style="font-size: 12px; padding-left: 4px;">
-                                    (<%= aluno.matricula.status_parecer === "Deferido" ? "X" : " " %>) Deferido
-                                    <br>
-                                    <div class="flex">
-                                        (<%= aluno.matricula.status_parecer === "Indeferido" ? "X" : " " %>) Indeferido
-                                        <div class="flex" style="padding-left: 2px; width: 70%; flex-direction: column;">
-                                            <div class="texto-linha"></div>
-                                            <div style="text-align: center; font-size: 6px;">Assinatura do Diretor(a)</div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-        </div>
+                <% } %>
+            </div>
         </div>
     </div>
 </body>

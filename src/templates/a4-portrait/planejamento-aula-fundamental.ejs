@@ -1,5 +1,5 @@
-    <!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="http://localhost:2000/assets/css/font.css">
@@ -11,7 +11,7 @@
         }
     </style>
 </head>
-<body>
+<body >
     <%- include("../reusable/header-escola.ejs") %>
     <div class="campos">
         <div class="flex flex-column small-gap">
@@ -86,23 +86,29 @@
                     <tr>
                         <td>
                             <% if (campo_atuacao) { %>
-                                <% campo_atuacao.split("\n").forEach(text => { %>
-                                    <%= text %><br>
-                                <% }) %> 
+                                <p style="word-break: break-all;">
+                                    <% campo_atuacao.split("\n").forEach(text => { %>
+                                        <%= text %><br>
+                                    <% }) %> 
+                                </p>
                             <% } %>
                         </td>
                         <td>
                             <% if (praticas_linguagem) { %>
-                                <% praticas_linguagem.split("\n").forEach(text => { %>
-                                    <%= text %><br>
-                                <% }) %>
+                                <p style="word-break: break-all;">
+                                    <% praticas_linguagem.split("\n").forEach(text => { %>
+                                        <%= text %><br>
+                                    <% }) %>
+                                </p>
                             <% } %>
                         </td>
                         <td>
                             <% if (objetos_conhecimento) { %>
-                                <% objetos_conhecimento.split("\n").forEach(text => { %>
-                                    <%= text %><br>
-                                <% }) %> 
+                                <p style="word-break: break-all;">
+                                    <% objetos_conhecimento.split("\n").forEach(text => { %>
+                                        <%= text %><br>
+                                    <% }) %> 
+                                </p>
                             <% } %>
                         </td>
                     </tr>
@@ -122,23 +128,29 @@
                     <tr>
                         <td>
                             <% if (eixo) { %>
-                                <% eixo.split("\n").forEach(text => { %>
-                                    <%= text %><br>
-                                <% }) %> 
+                                <p style="word-break: break-all;">
+                                    <% eixo.split("\n").forEach(text => { %>
+                                        <%= text %><br>
+                                    <% }) %> 
+                                </p>
                             <% } %>
                         </td>
                         <td>
                             <% if (unidades_tematicas) { %>
-                                <% unidades_tematicas.split("\n").forEach(text => { %> 
-                                    <%= text %><br>
-                                <% }) %> 
+                                <p style="word-break: break-all;">
+                                    <% unidades_tematicas.split("\n").forEach(text => { %> 
+                                        <%= text %><br>
+                                    <% }) %> 
+                                </p>
                             <% } %>
                         </td>
                         <td>
                             <% if (objetos_conhecimento) { %>
-                                <% objetos_conhecimento.split("\n").forEach(text => { %>
-                                    <%= text %><br>
-                                <% }) %> 
+                                <p style="word-break: break-all;">
+                                    <% objetos_conhecimento.split("\n").forEach(text => { %>
+                                        <%= text %><br>
+                                    <% }) %> 
+                                </p>
                             <% } %>
                         </td>
                     </tr>
@@ -157,16 +169,20 @@
                     <tr>
                         <td>
                             <% if (unidades_tematicas) { %>
-                                <% unidades_tematicas.split("\n").forEach(text => { %> 
-                                    <%= text %><br>
-                                <% }) %> 
+                                <p style="word-break: break-all;">
+                                    <% unidades_tematicas.split("\n").forEach(text => { %> 
+                                        <%= text %><br>
+                                    <% }) %> 
+                                </p>
                             <% } %>
                         </td>
                         <td>
                             <% if (objetivos_conhecimento) { %>
-                                <% objetivos_conhecimento.split("\n").forEach(text => { %>
-                                    <%= text %><br>
-                                <% }) %> 
+                                <p style="word-break: break-all;">
+                                    <% objetivos_conhecimento.split("\n").forEach(text => { %>
+                                        <%= text %><br>
+                                    <% }) %> 
+                                </p>
                             <% } %>
                         </td>
                     </tr>
@@ -177,23 +193,23 @@
             <div class="text-center bg-color item-padding">
                 HABILIDADES 
             </div>
-            <div class="item-padding item-border small-text">
+            <div class="item-padding item-border small-text" style="word-break: break-all;">
                 <% if (habilidades) { %>
-                    <% habilidades.split("\n").forEach(text => { %>
-                        <%= text %> <br>
-                    <% }) %> 
+                        <% habilidades.split("\n").forEach(text => { %>
+                            <%= text %> <br>
+                        <% }) %> 
                 <% } %>
             </div>
         </div>
-        <div class="flex flex-column">
+        <div class="flex flex-column" style="word-break: break-all; ">
             <div class="text-center bg-color item-padding">
                 PROCEDIMENTO DIDÁTICO/METODOLÓGICO
             </div>
-            <div class="item-padding item-border small-text">
+            <div class=" item-border small-text" style="word-break: break-all;" >
                 <% if (procedimento_didatico) { %>
-                    <% procedimento_didatico.split("\n").forEach(text => { %>
-                        <%= text %> <br> 
-                    <% }) %> 
+                        <% procedimento_didatico.split("\n").forEach(text => { %>
+                            <%-include("../reusable/verificar_formatacao_2.ejs",{text})  %> <br> </p>
+                        <% }) %> 
                 <% } %>
             </div>
         </div>
@@ -201,7 +217,7 @@
             <div class="text-center bg-color item-padding">
                 RECURSOS/MATERIAIS
             </div>
-            <div class="item-padding item-border small-text">
+            <div class="item-padding item-border small-text" style="word-break: break-all;">
                 <% if (recursos_materiais) { %>
                     <% recursos_materiais.split("\n").forEach(text => { %> 
                         <%= text %>;<br>
@@ -213,7 +229,7 @@
             <div class="text-center bg-color item-padding">
                 AVALIAÇÃO
             </div>
-            <div class="item-padding item-border small-text">
+            <div class="item-padding item-border small-text" style="word-break: break-all;">
                 <% if (avaliacao) { %>
                     <% avaliacao.split("\n").forEach(text => { %>
                         <%= text %> <br>
@@ -225,7 +241,7 @@
             <div class="text-center bg-color item-padding">
                 REFERÊNCIAS BIBLIOGRÁFICAS
             </div>
-            <div class="item-padding item-border small-text">
+            <div class="item-padding item-border small-text" style="word-break: break-all;">
                 <% if (referencias_bibliograficas) { %>
                     <% referencias_bibliograficas.split("\n").forEach(text => { %>
                         <%= text %> <br>

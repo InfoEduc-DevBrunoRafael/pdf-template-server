@@ -66,7 +66,7 @@
                 <div class="text-center bg-color item-padding">
                     EIXO TÉMATICO
                 </div>
-                <div class="item-padding item-border small-text">
+                <div class="small-text" style="word-break: break-all;">
                     <% if (eixo_tematico_conteudo) { %>
                         <% eixo_tematico_conteudo.split("\n").forEach(texto => { %>
                             <%= texto %><br>
@@ -78,7 +78,7 @@
                 <div class="text-center bg-color item-padding">
                     CAMPOS DE EXPERIÊNCIA
                 </div>
-                <div class="item-padding item-border small-text">
+                <div class="small-text" style="word-break: break-all;">
                     <% if (campos_experiencia) { %>
                         <% campos_experiencia.split("\n").forEach(texto => { %>
                             <%= texto %><br> 
@@ -91,7 +91,7 @@
             <div class="text-center bg-color item-padding">
                 OBJETOS DE APRENDIZAGEM E DESENVOLVIMENTO
             </div>
-            <div class="item-padding item-border small-text">
+            <div class="small-text" style="word-break: break-all;">
                 <% if (objetivos_aprendizagem_desenvolvimento) { %>
                     <% objetivos_aprendizagem_desenvolvimento.split("\n").forEach(texto => { %>
                         <%= texto %><br>
@@ -103,10 +103,10 @@
             <div class="text-center bg-color item-padding">
                 PROCEDIMENTO DIDÁTICO/METODOLOGIA
             </div>
-            <div class="item-padding item-border small-text">
+            <div class="item-padding item-border small-text" style="word-break: break-all;">
                 <% if (procedimento_didatico) { %>
-                    <% procedimento_didatico.split("\n").forEach(texto => { %>
-                        <%= texto %><br> 
+                    <% procedimento_didatico.split("\n").forEach(text => { %>
+                        <%-include("../reusable/verificar_formatacao_2.ejs",{text})  %> <br> 
                     <% }) %> 
                 <% } %>
             </div>
@@ -115,7 +115,7 @@
             <div class="text-center bg-color item-padding">
                 RECURSOS/MATERIAIS
             </div>
-            <div class="item-padding item-border small-text">
+            <div class="item-padding item-border small-text" style="word-break: break-all;">
                 <% if (recursos_materiais) { %>
                     <% recursos_materiais.split("\n").forEach(texto => { %>
                         <%= texto %><br> 
@@ -127,7 +127,7 @@
             <div class="text-center bg-color item-padding">
                 AVALIAÇÃO
             </div>
-            <div class="item-padding item-border small-text">
+            <div class="item-padding item-border small-text" style="word-break: break-all;">
                 <% if (avaliacao) { %>
                     <% avaliacao.split("\n").forEach(texto => { %>
                         <%= texto %><br>
@@ -139,7 +139,7 @@
             <div class="text-center bg-color item-padding">
                 REFERÊNCIAS BIBLIOGRÁFICAS
             </div>
-            <div class="item-padding item-border small-text">
+            <div class="item-padding item-border small-text" style="word-break: break-all;">
                 <% if (referencias_bibliograficas) { %>
                     <% referencias_bibliograficas.split("\n").forEach(texto => { %>
                         <%= texto %> 

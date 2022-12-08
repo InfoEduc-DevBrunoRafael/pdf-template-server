@@ -29,8 +29,17 @@
         <h2 style="text-align: center; margin-top: 30px;"><%= titulo_ata %></h2>
         <div id="content">
             <div>
+                <%
+                    function adicionaZero(numero){
+                        if (numero <= 9) 
+                            return "0" + numero;
+                        else
+                            return numero; 
+                    }
+                %>
+                <% <% var data = new Date(data_ata) %> %> 
                 <h2>1. Data, horário, local, objetivo: </h2>
-                <p><b>Data</b>: <%= data %></p>
+                <p><b>Data</b>: <%= (adicionaZero(data.getDate().toString()) + "/" + (adicionaZero(data.getMonth()+1).toString()) + "/" + data.getFullYear()) %></p>
                 <p><b>Horário</b>: <%= horario %></p>
                 <p><b>Local</b>: <%= local %></p>
                 <p><b>Objetivo</b>: <%= objetivo %></p>

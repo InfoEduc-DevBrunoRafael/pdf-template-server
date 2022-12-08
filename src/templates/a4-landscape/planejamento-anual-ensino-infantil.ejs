@@ -96,7 +96,7 @@
         <div class="item-border item-padding" style="font-size: 13px;">
             <% if (procedimentos_atividades) { %>
                 <% procedimentos_atividades.split("\n").forEach(text => { %>
-                    <%= text %><br>
+                    <%-include("../reusable/verificar_formatacao_2.ejs",{text})  %> <br> 
                 <% }) %> 
             <% } %>
         </div>

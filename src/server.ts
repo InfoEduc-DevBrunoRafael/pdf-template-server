@@ -16,7 +16,7 @@ function logFormat(message: object) {
     logfmt.log(message);
 }
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 function getIp(req: Request) {
     return (

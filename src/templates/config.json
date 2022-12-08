@@ -9,6 +9,17 @@
         "path": "a4-portrait",
         "format": "A4",
         "landscape": false,
-        "watermark_exceptions": ["diario-classe", "tabela"]
+        "watermark_exceptions": [
+            "diario-classe",
+            "tabela",
+            "relatorio-alunos-etapa",
+            "planejamento-aula-infantil",
+            "planejamento-aula-fundamental",
+            "planejamento-aula-fundamental-parte-diversificada",
+            "modelo-planejamento-infantil",
+            "modelo-planejamento-fundamental",
+            "modelo-planejamento-aula-infantil",
+            "modelo-planejamento-aula-fundamental"
+        ]
     }
 ]

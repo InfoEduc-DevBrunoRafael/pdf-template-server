@@ -1,31 +1,107 @@
 <%- include("../../css/ficha.ejs") %>
-<%- include("../../css/common.ejs") %> 
-<div>
-    <div id="titulo" style="position: relative; top: 20px;"><b><u>FICHA DE ACOMPANHAMENTO</u></b></div>
-    <div >
-        <% ficha_acompanhamento.forEach(element => { %>
-            <table class="table" style="width: 100%; margin-top: 30px; border-spacing: 0;" >
+<%- include("../../css/common.ejs") %>
+<style>
+    .item-border {
+        border: 1px solid;
+    }
+    .bold {
+        font-weight: bold;
+    }
+    .small-pad {
+        padding: 3px 5px;
+    }
+    .pad {
+        padding: 5px;
+    }
+    .avoid-break {
+        break-inside: avoid;
+    }
+</style>
+
+<div class="flex flex-column">
+    <% 
+        function groupByProperty(array, property) {
+            const map = new Map()
+            for (let i = 0; i < array.length; i++) {
+                const element = array[i];
+                const propValue = element[property]
+                if (!map.has(propValue)) {
+                    map.set(propValue, [])
+                }
+                const arrayItem = map.get(propValue)
+                arrayItem.push(element)
+                map.set(propValue, arrayItem)
+            }
+            return map
+        }
+        
+        const relatorioPorPeriodo = groupByProperty(relatorio_experiencia, "periodo_letivo")
+        const valuesIterator = relatorioPorPeriodo.values()
+    %>
+    <div>
+        <% while(true) { %>
+            <% const it = valuesIterator.next() %>
+            <% if (it.done) break %>
+            
+            <% const relatorioPorCampoExp = groupByProperty(it.value, "campo_experiencia") %>
+            <% const periodoKeys = relatorioPorCampoExp.keys() %>
+            <% while(true) { %>
+                <% const it = periodoKeys.next() %>
+                <% if (it.done) break %>
                 
-                    <tr">
-                        <td colspan="2"><b>CAMPOS DE EXPERIÊNCIA:</b> <%= element.campos_experiencia %></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><b>Faixa Etária:</b> <%= element.faixa_etaria %> </td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">Objetivo de Aprendizagem e Desenvolvimento</th>
-                    </tr>
-                    <tr>
-                        <td><%= element.objetivo %> </td>
-                        <td style="max-width: 1px;" class="center"><b>Alcançado</b><br><%= element.alcancado === true ? "Sim" : "Não" %></td>
-                    </tr>
-                    <tr>
-                        <th colspan="2">Avaliação descritiva</th>
-                    </tr>
-                    <tr>
-                        <td colspan="2"><%= element.descricao_avaliativa %> </td>
-                    </tr>
-            </table>
-        <% }) %>
+                <div class="item-border small-pad avoid-break">
+                    <b>CAMPO DE EXPERIÊNCIA:</b>
+                    <%= it.value %>
+                </div>
+                <% const array = relatorioPorCampoExp.get(it.value) %>
+                <% const faixaEtariaGroup = groupByProperty(array, "faixa_etaria") %> 
+                <% const faixaEtariaKeys = faixaEtariaGroup.keys() %>
+                <% while (true) { %>
+                    <% const it = faixaEtariaKeys.next() %>
+                    <% if (it.done) break %>
+                    <div class="avoid-break">
+                        <div class="item-border small-pad avoid-break">
+                            <b>Faixa Etária:</b>
+                            <%= it.value %>
+                        </div>
+                        
+                        <% const lista = faixaEtariaGroup.get(it.value) %>
+                        <% lista.forEach(item => { %>
+                            <div class="avoid-break">
+                                <div class="item-border text-center pad bold">
+                                    Objetivos de Aprendizagem e Desenvolvimento
+                                </div>
+                                <div class="flex avoid-break">
+                                   
+                                    <div class="item-border flex flex-column grow">
+                                        <% var objetivos = item.lista_objetivo_aprendizagem %>
+                                        
+                                        <div class="flex pad">
+                                            &bull; <%= objetivos %><br>
+                                        </div>
+                            
+                                        <% } %>
+                                        </div>
+                                        <div class="item-border flex flex-column" style="gap: 15px; flex-grow: 0; padding: 10px 5px;">
+                                            <div class="text-center" style="font-size: 15px;">
+                                                Alcançado
+                                            </div>
+                                            <div class="text-center">
+                                                <%= item.alcancado ? "Sim" : "Não" %> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center item-border pad bold">
+                                    Avaliação Descritiva
+                                </div>
+                                <div class="item-border pad">
+                                    <%= item.descricao_avaliativa %> 
+                                </div>
+                                <% }) %>
+                            </div>
+                    <% } %>
+            <% } %>
+        <% } %> 
     </div>
-</div>  
+</div>

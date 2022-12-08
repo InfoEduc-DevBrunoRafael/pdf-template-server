@@ -17,7 +17,7 @@
     <div id="container">
         <%- include("../reusable/header-escola.ejs") %>
         <div style="margin-top: 40px;">
-            <div id="titulo" ><b>Relatório de Professores</b></div>
+            <div id="titulo" ><b><%= tipo_relatorio = "normal" ? "Relatório de Professores" : "Relatório de Professores Efetivos" %> </b></div>
             <div style="display: flex;">
                 <table class="table" style="width: 100%; border-spacing: 0;">
                     <tr>
