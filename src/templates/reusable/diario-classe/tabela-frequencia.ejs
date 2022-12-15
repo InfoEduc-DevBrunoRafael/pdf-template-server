@@ -1,0 +1,267 @@
+<!-- tabela de frequencia do template frequencia individual do aluno  -->
+
+<!-- construido com base e pequenas alterações do arquivo frequencia-nova-dos-diarios -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+        #frequencia {
+            table-layout: fixed;
+            font-size: 12px;
+        }
+    
+        #frequencia>tbody>tr>td:first-child {
+            font-stretch: 50%;
+        }
+    
+        #frequencia>thead>tr>td {
+            font-stretch: condensed;
+            text-align: center;
+        }
+    
+        .table {
+            width: 100%;
+            border-spacing: 0;
+        }
+    
+        .table>thead>tr>td,
+        .table>tbody>tr>td {
+            border: 1px solid;
+        }
+    
+        .text-line {
+            border-bottom: 1px solid;
+        }
+    
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <table id="frequencia" class="table">
+        <thead>
+            <tr>
+                <td style="width: 60px">Meses/<br />Data</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+                <td>6</td>
+                <td>7</td>
+                <td>8</td>
+                <td>9</td>
+                <td>10</td>
+                <td>11</td>
+                <td>12</td>
+                <td>13</td>
+                <td>14</td>
+                <td>15</td>
+                <td>16</td>
+                <td>17</td>
+                <td>18</td>
+                <td>19</td>
+                <td>20</td>
+                <td>21</td>
+                <td>22</td>
+                <td>23</td>
+                <td>24</td>
+                <td>25</td>
+                <td>26</td>
+                <td>27</td>
+                <td>28</td>
+                <td>29</td>
+                <td>30</td>
+                <td>31</td>
+                <td class="text-center" style="width: 50px">Faltas</td>
+            </tr>
+        </thead>
+        <tbody>
+          <%
+
+                function parseDate(date) {
+                    const dateSplit = date.split("-")
+                    return new Date(dateSplit[0], dateSplit[1]-1, dateSplit[2]);
+                };
+
+                const year = (ano_letivo) ? parseDate(ano_letivo.data_inicio).getUTCFullYear() : Number(nome_ano_letivo);
+
+                // se a frequência estiver vazia, precisamos ainda assim gerar a tabela corretamente...
+
+                const alunoFrequencia = (Array.isArray(frequencia)) ? 
+                frequencia.sort((a, b) => parseDate(b.data_lancamento).getTime() - parseDate(a.data_lancamento).getTime()) : [];
+
+                function getAlunoFaltasNoDia(date, month){
+
+                    // retorna o total de faltas do aluno de acordo com o dia e mês especificado...
+                    const result = {
+                        qtd_faltas: 0,
+                        qtd_faltas_justificadas: 0,
+                        display: false
+                    };
+
+                    for (let i = 0; i < alunoFrequencia.length; i++){
+
+                        // verifica se o registro de falta é do mesmo dia, mês e ano especificados...
+                        // reverter cód abaixo...
+                        const register = alunoFrequencia[i];
+
+                        const dateLancamento = parseDate(register.data_lancamento);
+                        if (
+                            dateLancamento.getUTCDate() === date && 
+                            dateLancamento.getUTCMonth() === month && 
+                            dateLancamento.getUTCFullYear() === year
+                        ) {
+
+                            result.qtd_faltas += register.qtd_faltas;
+
+                            if(register.falta_justificada) {
+                                result.qtd_faltas_justificadas += register.qtd_faltas;
+                            }
+
+                            result.display = true;
+                        }
+                    }
+
+                    return result;
+                }
+
+                const monthDict = [
+                    'Janeiro',
+                    'Fevereiro',
+                    'Março',
+                    'Abril',
+                    'Maio',
+                    'Junho',
+                    'Julho',
+                    'Agosto',
+                    'Setembro',
+                    'Outubro',
+                    'Novembro',
+                    'Dezembro'
+                ];
+
+                const alunoFrequenciaParsed = [];
+                let totalFaltas = 0;
+
+                monthDict.forEach((monthName, monthIndex)=>{
+
+                    alunoFrequenciaParsed.push({
+                        monthName,
+                        frequency: [],
+                        totalFaltas: 0
+                    })
+
+                    for(let i = 1; i <= 31; i++){
+
+                        const { qtd_faltas, qtd_faltas_justificadas, display } = getAlunoFaltasNoDia(i, monthIndex);
+
+                        alunoFrequenciaParsed[monthIndex].frequency.push({ qtd_faltas, qtd_faltas_justificadas, display });
+                    }
+
+                    
+                    alunoFrequenciaParsed[monthIndex].totalFaltas = alunoFrequenciaParsed[monthIndex].frequency.reduce((prev, current) => prev + (current.qtd_faltas - current.qtd_faltas_justificadas), 0);
+                    
+                    totalFaltas += alunoFrequenciaParsed[monthIndex].totalFaltas;
+                });
+
+            %>
+
+            <!-- colar cod de teste da frequencia -->
+                    
+            <% alunoFrequenciaParsed.forEach(register=>{ %>
+                <tr>
+                    <td><%= register.monthName %></td>
+
+                    <% if(register.frequency){ %>
+
+                        <% register.frequency.forEach(item=>{ %>
+
+                            <% if(item.display){ %>
+
+                                <td class="text-center" style="font-size: 10px;">
+
+                                    <%= item.qtd_faltas %><%= (item.qtd_faltas_justificadas > 0) ? '*' : '' %>
+
+                                </td>                                
+
+                            <% } else { %>
+                                <td class="text-center"></td>
+                            <% } %>
+
+                        <% }); %>
+                    
+                    <% } else { %>
+                        <td class="text-center"></td>
+                    <% } %>
+
+                    <td class="text-center"><%= register.totalFaltas %></td>
+                </tr>
+            <% }); %>
+
+            <%
+                // 200 é o número padrão de dias letivos atualmente, caso não seja especificado pelo usuário.
+                const numeroDeAulasDisciplina = (numero_aulas_disciplina) ? Number(numero_aulas_disciplina) : "Não informado";
+            %>
+            
+            <tr style="font-size: 16px; font-weight: bold; text-transform: uppercase;">
+                <td colspan="11">
+
+                    <% if (tipo_documento !== "Infantil") { %>
+
+                        Nº de aulas da disciplina:
+                        
+                    <% } else { %>
+                            
+                        Nº DE DIAS LETIVOS
+
+                    <% }%>
+
+                    <span style="font-weight: normal;"> <%= numeroDeAulasDisciplina %> </span>
+                </td>
+                <td colspan="11">
+                    Total de Faltas: 
+                    <span style="font-weight: normal;"> <%= totalFaltas %> </span>
+                </td>
+                <!-- 100 - (Total de faltas/Nº de aulas da disciplina)*100 -->
+
+                <%
+
+                    let porcentagemFrequencia = null;
+
+                    if(numero_aulas_disciplina){
+                        porcentagemFrequencia = 100 - ((totalFaltas / numero_aulas_disciplina) * 100);
+                    }
+
+                %>
+
+                <td colspan="11">
+                    <% if(porcentagemFrequencia !== null){ %>
+
+                        Frequência (%): 
+
+                        <span style="font-weight: normal;">
+                            <%= (porcentagemFrequencia % 1 > 0) ? porcentagemFrequencia.toFixed(1) : porcentagemFrequencia %>
+                        </span>
+
+                    <% } else { %>
+
+                        Frequência (%):
+
+                    <% } %>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <span>
+        <span class="bold" style="font-size: 12px;">Legenda:</span>
+        <span style="font-size: 12px;">(*) - falta justificada</span>
+    </span>
+</body>
+</html>

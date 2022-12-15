@@ -1,0 +1,173 @@
+<!-- documento de frequencia com novo header e nova tabela de campo de dados do aluno -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="http://localhost:2000/assets/css/font.css">
+    <meta charset="UTF-8">
+    <style>
+        .text-line {
+            border-bottom: 1px solid;
+            flex: 1;
+        }
+        .bold {
+            font-weight: 700;
+         }
+        .cabecalho {
+            margin-top: 10px;
+            width: 800;
+            text-align: center;
+            line-height: 0.3;
+            display: flex;
+            justify-content: space-between;
+         }
+         .cabecalho h3 {
+            font-size: 20px;
+            line-height: normal;
+            margin-bottom: -5px;
+         }
+         .cabecalho p {
+            font-size: 15px;
+         }
+         .dados_aluno h2 {
+            font-size: 19px;
+            text-align: center;
+            margin-bottom: 20px;
+         }
+         .dados_aluno table {
+            font-size: 16px;
+         }
+         .dados_aluno table td {
+            width: 650px;
+            padding-left: 7px;
+            padding-top: 3px;
+            padding-bottom: 3px;
+         }
+         .dados_aluno table tr:nth-child(3) td:nth-child(2) {
+            width: 250px;
+         }
+         .assinaturas{
+            margin-top: 90px;
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+         }
+         .campo_assinatura{
+            text-align: center;
+            border-top: 1px solid;
+            width: 355px;
+            padding-top: 7px;
+         }
+    </style>
+</head>
+<body style="margin: 30px;">
+  
+      <header class="cabecalho">
+        <!-- imagem rede -->
+        <div>
+          <img 
+            width="100" 
+            height="100" 
+            style="margin-top: 25px; border-radius: 5px;"
+            src="<%= header.logomarca_url %> %>"
+          >
+        </div>
+
+        <div>
+          <h3><%= header.nome_escola %></h3>
+          <p class="bold" style="font-size: 18px;"> <%= header.nome_rede %> </p>
+          <p>
+            <span class="bold">CNPJ: </span> <span><%= header.endereco_cnpj %></span>
+            <b>|</b>
+            <span class="bold">Código INEP:</span> <span> <%= escola.codigo_inep %> </span>
+          </p>
+          <p>
+            <span class="bold">ENDEREÇO:</span> 
+            <span><%= escola.endereco_escola %></span>
+          </p>
+          <p>
+            <span class="bold">E-MAIL:</span> <span> <%= escola.email_escola %> </span>
+            <b>|</b>
+            <span class="bold">TEL:</span> <span> <%= escola.telefone_escola %> </span>
+          </p>
+        </div>
+
+        <!-- imagem escola -->
+        <div>
+          <img 
+            width="100" 
+            height="100" 
+            style="margin-top: 25px; border-radius: 5px;"
+            src="<%= escola.url_logo_secretaria %>"
+          >
+        </div>
+    </header>
+    <br>
+
+    <%- include("../css/common.ejs") %>
+    <div>
+        <div class="flex flex-column" style="gap: 10px;">
+
+          <!-- dados do aluno -->
+            <section class="dados_aluno">
+              <h2>
+                <u>MAPA INDIVIDUAL DE FREQUÊNCIA</u>
+              </h2>
+              <table class="table">
+                <tr>
+                    <td colspan="2">
+                      <span class="bold">ESTABELECIMENTO DE ENSINO:</span>
+                      <span><%= header.nome_escola %></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                      <span class="bold">ALUNO(A):</span>
+                      <span><%= aluno.nome %></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                      <span class="bold">TURMA:</span>
+                      <span><%= nome_turma %></span>
+                    </td>
+                    <td>
+                      <span class="bold">ANO LETIVO:</span>
+                      <span><%= nome_ano_letivo %></span>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colspan="2">
+                      <span class="bold">NOME DO PROFESSOR(A):</span>
+                      <span><%= nome_professor %></span>
+                    </td>
+                </tr>
+
+                <!-- checagem dp tipo de documento -->
+                <% if (tipo_documento !== "Infantil") { %>
+                  <tr>
+                      <td colspan="2">
+                        <span class="bold">COMPONENTE CURRICULAR:</span>
+                        <span><%= nome_disciplina %></span>
+                      </td>
+                  </tr>
+                <% } %>
+            </table>
+          </section>
+        </div>
+        <br>
+
+        <%- include("../reusable/diario-classe/tabela-frequencia", { frequencia, ano_letivo, numero_aulas_disciplina, tipo_documento }) %>
+        
+        <section class="assinaturas">
+          <div class="campo_assinatura">
+             <span class="bold">Assinatura da Coordenação Pedagógica</span>
+          </div>
+          <div class="campo_assinatura">
+             <span class="bold">Assinatura da Coordenação Pedagógica</span>
+          </div>
+       </section>
+    </div>
+</body>
+</html>
